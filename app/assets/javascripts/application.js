@@ -11,5 +11,7 @@
 // about supported directives.
 //
 //= require jquery
+//= bootstrap.tab.js
 //= require jquery_ujs
-//= require bootstrap
+//= require bootstrap-sprockets
+//= require bootstrap-datepicker

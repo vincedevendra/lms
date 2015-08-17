@@ -13,6 +13,8 @@ gem 'bootstrap_form'
 gem 'bcrypt'
 gem 'fabrication'
 gem 'faker'
+gem 'bootstrap-datepicker-rails'
+gem 'figaro'
 
 group :development do
   gem 'thin'

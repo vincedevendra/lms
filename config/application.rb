@@ -11,7 +11,6 @@ module Lms
     config.encoding = "utf-8"
     config.filter_parameters += [:password]
     config.active_support.escape_html_entities_in_json = true
-    config.time_zone = 'Eastern Time (US & Canada)'
 
     config.assets.enabled = true
     config.generators do |g|
