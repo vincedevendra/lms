@@ -124,21 +124,23 @@ describe AssignmentsController do
   end
 
   describe "DELETE destroy" do
-    before { set_professor_user }
-    
-    let!(:essay) { Fabricate(:assignment) }
-    before { delete :destroy, id: essay.id }
+    let(:essay) { Fabricate(:assignment) }
+
+    before do 
+      set_professor_user    
+    end
 
     it "deletes the assignment" do
+      delete :destroy, id: essay.id
       expect(Assignment.count).to eq(0)
     end
 
     it "redirects to root_path" do
+      delete :destroy, id: essay.id
       expect(response).to redirect_to root_path
     end
 
     it_behaves_like "unless_professor_redirect" do
-      essay = Fabricate(:assignment)
       let(:action) { delete :destroy, id: essay.id }
     end
   end

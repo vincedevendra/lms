@@ -1,5 +1,5 @@
 class SessionsController < ApplicationController
-  before_action :current_user_redirect
+  before_action :current_user_redirect, only: :create
 
   def create
     @user = User.find_by(email: params[:email])
@@ -11,5 +11,10 @@ class SessionsController < ApplicationController
       flash.now[:danger] = "Please check your email and password and try again."
       render 'new'
     end
+  end
+
+  def destroy
+    session[:user_id] = nil
+    redirect_to sign_in_path
   end
 end

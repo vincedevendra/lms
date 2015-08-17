@@ -59,7 +59,5 @@ RSpec.configure do |config|
   # https://relishapp.com/rspec/rspec-rails/v/3-0/docs
   config.infer_spec_type_from_file_location!
 
-  config.after :all do
-    ActiveRecord::Base.subclasses.each(&:delete_all)
-  end
+  
 end
