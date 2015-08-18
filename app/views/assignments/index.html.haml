@@ -19,9 +19,8 @@
               %span.caret
             %ul.dropdown-menu
               %li 
-                / %a{href: '/'} View Submissions
                 = link_to "Edit", edit_assignment_path(assignment)
-                = link_to "Delete", assignment, method: :delete, data: { confirm: "Are you sure you want to delete this assignment? You will lose any associated information."}
+                = link_to "Delete", assignment, method: :delete, data: { confirm: "Are you sure you want to delete this assignment?"}
         %dt= assignment.title
         %br/
         %dt Due Date
