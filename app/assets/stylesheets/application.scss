@@ -1,5 +1,9 @@
+/*
+*= require_self
+*= require_tree .
+*/
+
 @import "bootstrap-sprockets";
 @import "bootstrap";
 @import "rails_bootstrap_forms";
-@import "bootstrap-datepicker"
-
+@import "bootstrap-datepicker";

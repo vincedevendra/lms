@@ -7,11 +7,10 @@
     = csrf_meta_tag
     = stylesheet_link_tag "application"
     = javascript_include_tag "application"
+    <link href='https://fonts.googleapis.com/css?family=Raleway' rel='stylesheet' type='text/css'>
   %body
     %header
-      = render 'shared/header'
+      = render 'shared/header' unless current_page?(sign_in_path)
     %div
       = render 'shared/messages'
       = yield
-  
-

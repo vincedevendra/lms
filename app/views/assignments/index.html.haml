@@ -1,37 +1,39 @@
-/ .col-md-2
-/   %ul.nav.nav-pills.nav-stacked
-/     %li.active
-/       %a{href: '/'} Current Assignments
-/     %li
-/       %a{href: '/'} Submitted Assignments
-.container
-  .col-md-10
-    - if current_user.professor?
-      = link_to "+ New Assignment", new_assignment_path, class: 'btn btn-success'
-      %br/
-      %br/
+=render 'form', title: "New Assignment", id: 'new'
+=render 'form', title: "Edit Assignment", id: 'edit'
+%section.container.assignments
+  .row
+    .col-md-10
+      .course-title
+        = link_to "PL1070", "#", class: 'title'
+        = link_to '#', data: {toggle: 'modal', target: '#new'}, class: 'new-assignment' do
+          %span.glyphicon.glyphicon-plus
     - @assignments.each do |assignment|
-      .well
-        - if current_user.professor?
-          .dropdown.pull-right
-            %button.btn.btn-warning.dropdown-toggle{type: "button", "data-toggle" => "dropdown"} 
-              Options
-              %span.caret
-            %ul.dropdown-menu
-              %li 
-                = link_to "Edit", edit_assignment_path(assignment)
-                = link_to "Delete", assignment, method: :delete, data: { confirm: "Are you sure you want to delete this assignment?"}
-        %dt= assignment.title
-        %br/
-        %dt Due Date
-        %dd= assignment.due_date.strftime("%A, %b %d")
-        %br/
-        %dt Description
-        %dd= assignment.description
-        %br/
-        %dt Assigned On
-        %dd= assignment.created_at.strftime("%A, %b %d")
-        %br/
-        %dt Point Value
-        %dd= assignment.point_value
-    
+      - 5.times do
+        .well.col-sm-10
+          .title-bar
+            .submission-count.pull-left
+              =link_to "#", class: 'btn btn-primary btn-sm' do
+                Submissions
+                %span.badge 12
+            .dropdown.pull-right
+              %a.dropdown-toggle.cog{type: "button", "data-toggle" => "dropdown"}
+                %span.glyphicon.glyphicon-cog
+              %ul.dropdown-menu
+                %li
+                  = link_to '#', data: {toggle: 'modal', target: '#edit'} do
+                    %span.glyphicon.glyphicon-pencil
+                    Edit
+                  = link_to assignment, method: :delete, data: { confirm: "Are you sure you want to delete this assignment?"} do
+                    %span.glyphicon.glyphicon-remove
+                    Delete
+            %h3.assignment-title.text-center= assignment.title
+          .col-sm-3
+            %dt Due Date
+            %dd= assignment.due_date.strftime("%A, %b %d")
+            %dt Assigned On
+            %dd= assignment.created_at.strftime("%A, %b %d")
+            %dt Point Value
+            %dd= assignment.point_value
+          .col-sm-8
+            %dt Description
+            %dd= assignment.description

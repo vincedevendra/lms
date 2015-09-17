@@ -5,6 +5,7 @@ class AssignmentsController < ApplicationController
 
   def index
     @assignments = Assignment.all.order(due_date: :desc)
+    @assignment = Assignment.new
   end
 
   def new

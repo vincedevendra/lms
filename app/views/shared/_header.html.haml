@@ -3,12 +3,7 @@
     .navbar-header
       = link_to root_path do
         .navbar-brand
-          Assignments 101
-    - if current_user
+          %span.glyphicon.glyphicon-book
+          GradeBook
       %ul.nav.navbar-nav
         %li= link_to("Sign Out", sign_out_path, method: :delete)
-    - else
-      %ul.nav.navbar-nav
-        %li= link_to "Register", register_path
-        %li= link_to "Sign In", sign_in_path
-      
