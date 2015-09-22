@@ -13,8 +13,8 @@ class ApplicationController < ActionController::Base
     redirect_to sign_in_path unless current_user
   end
 
-  def unless_professor_redirect
-    redirect_to root_path unless current_user && current_user.professor?
+  def unless_instructor_redirect
+    redirect_to root_path unless current_user && current_user.instructor?
   end
 
   def current_user

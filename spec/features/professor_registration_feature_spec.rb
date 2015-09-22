@@ -1,10 +1,10 @@
 require 'spec_helper'
 
-feature "professor registration" do
-  background { ENV["professor_key"] = '12345' }
+feature "instructor registration" do
+  background { ENV["instructor_key"] = '12345' }
 
   scenario "creating a new profesor account" do
-    visit register_professor_path
+    visit register_instructor_path
     fill_in "Email", with: Faker::Internet.email
     fill_in "Password", with: 'password'
     fill_in "Confirm Password", with: 'password'

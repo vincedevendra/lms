@@ -2,15 +2,14 @@ require 'spec_helper'
 
 feature "creating, deleting, and editing assignments" do
 
-  scenario "professor creates, deletes, and edits assignments" do
-    user = Fabricate(:user, professor: true)
+  scenario "instructor creates, deletes, and edits assignments" do
+    user = Fabricate(:user, instructor: true)
     sign_in_user(user)
-    click_link "+ New Assignment"
+    click_new_assignment_link
 
     complete_assignment_form_with_title("Foo")
     expect(page).to have_content("Foo")
 
-    click_button "Options"
     click_link "Delete"
 
     expect(page).not_to have_content("Foo")
@@ -30,14 +29,17 @@ feature "creating, deleting, and editing assignments" do
   end
 
   def create_assignment_with_title(title)
-    click_link "+ New Assignment"
+    click_new_assignment_link
     complete_assignment_form_with_title(title)
   end
 
   def change_assignment_title_to(title)
-    click_button "Options"
     click_link "Edit"
     fill_in "Title", with: title
     click_button "Submit"
+  end
+
+  def click_new_assignment_link
+    find(:xpath, "//a[@href='#{new_assignment_path}']").click
   end
 end

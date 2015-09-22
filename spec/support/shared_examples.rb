@@ -1,4 +1,4 @@
-shared_examples "no_current_user_redirect" do 
+shared_examples "no_current_user_redirect" do
   before do
     clear_current_user
     action
@@ -20,7 +20,7 @@ shared_examples "current_user_redirect" do
   end
 end
 
-shared_examples "unless_professor_redirect" do
+shared_examples "unless_instructor_redirect" do
   before do
     set_current_user
     action
@@ -30,5 +30,3 @@ shared_examples "unless_professor_redirect" do
     expect(response).to redirect_to root_path
   end
 end
-
-

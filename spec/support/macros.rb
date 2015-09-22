@@ -5,8 +5,8 @@ def set_current_user
   session[:user_id] = user.id
 end
 
-def set_professor_user
-  user = Fabricate(:user, professor: true)
+def set_instructor_user
+  user = Fabricate(:user, instructor: true)
   session[:user_id] = user.id
 end
 

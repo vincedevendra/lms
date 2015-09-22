@@ -1,15 +1,19 @@
 class AssignmentsController < ApplicationController
   before_action :no_current_user_redirect, only: :index
-  before_action :unless_professor_redirect, except: :index
+  before_action :unless_instructor_redirect, except: :index
   before_action :find_assignment, only: [:edit, :update, :destroy]
+  respond_to :html, :js
 
   def index
     @assignments = Assignment.all.order(due_date: :desc)
-    @assignment = Assignment.new
   end
 
   def new
     @assignment = Assignment.new
+  end
+
+  def edit
+    @assignment = Assignment.find(params[:id])
   end
 
   def create

@@ -20,22 +20,22 @@ describe AssignmentsController do
       let(:action) { get :index }
     end
   end
-  
+
   describe "GET new" do
-    before { set_professor_user }
+    before { set_instructor_user }
 
     it "sets a new assignment object" do
       get :new
       expect(assigns(:assignment)).to be_a_new(Assignment)
     end
 
-    it_behaves_like "unless_professor_redirect" do
+    it_behaves_like "unless_instructor_redirect" do
       let(:action) { get :new }
     end
   end
 
   describe "POST create" do
-    before { set_professor_user }
+    before { set_instructor_user }
 
     context "when the post passes validations" do
       before { post :create, assignment: Fabricate.attributes_for(:assignment) }
@@ -64,34 +64,34 @@ describe AssignmentsController do
       end
     end
 
-    it_behaves_like "unless_professor_redirect" do
+    it_behaves_like "unless_instructor_redirect" do
       let(:action) { post :create, assignment: Fabricate.attributes_for(:assignment) }
     end
   end
 
   describe "POST edit" do
-    before { set_professor_user }
+    before { set_instructor_user }
     it "uses params to set an existing assignment object" do
       essay = Fabricate(:assignment)
       get :edit, id: essay.id
       expect(assigns(:assignment).title).to eq(essay.title)
     end
 
-    it_behaves_like "unless_professor_redirect" do 
+    it_behaves_like "unless_instructor_redirect" do
       essay = Fabricate(:assignment)
       let(:action) { get :edit, id: essay.id }
     end
   end
 
   describe "PATCH update" do
-    before { set_professor_user }
+    before { set_instructor_user }
 
-    context "when validations pass" do 
+    context "when validations pass" do
       let(:essay) { Fabricate(:assignment, title: "foo") }
       before do
-        put :update, id: essay.id, assignment: { title: essay.title, 
-                                     description: essay.description, 
-                                     due_date: "10/10/2017", 
+        put :update, id: essay.id, assignment: { title: essay.title,
+                                     description: essay.description,
+                                     due_date: "10/10/2017",
                                      point_value: 3}
       end
 
@@ -114,10 +114,10 @@ describe AssignmentsController do
 
       it "does not update the object" do
         expect(essay.reload.title).to eq("foo")
-      end  
+      end
     end
 
-    it_behaves_like "unless_professor_redirect" do
+    it_behaves_like "unless_instructor_redirect" do
       essay = Fabricate(:assignment)
       let(:action) { patch :update, id: essay.id, assignment: Fabricate.attributes_for(:assignment) }
     end
@@ -126,8 +126,8 @@ describe AssignmentsController do
   describe "DELETE destroy" do
     let(:essay) { Fabricate(:assignment) }
 
-    before do 
-      set_professor_user    
+    before do
+      set_instructor_user
     end
 
     it "deletes the assignment" do
@@ -140,7 +140,7 @@ describe AssignmentsController do
       expect(response).to redirect_to root_path
     end
 
-    it_behaves_like "unless_professor_redirect" do
+    it_behaves_like "unless_instructor_redirect" do
       let(:action) { delete :destroy, id: essay.id }
     end
   end

@@ -1,17 +1,18 @@
-.modal.fade{id: id}
-  .modal-dialog
-    .modal-content
-      .modal-header
-        %button{type: "button", class: "close", 'data-dismiss' => "modal", 'aria-label' => "Close"}
-          %span{'aria-hidden' => 'true'} &times;
-        %h3= title
+.modal-dialog
+  .modal-content
+    .modal-header
+      %button{type: "button", class: "close", 'data-dismiss' => "modal", 'aria-label' => "Close"}
+        %span{'aria-hidden' => 'true'} &times;
+      %h3= title
+    = bootstrap_form_for(@assignment, layout: :horizontal, label_col: 'col-md-3', control_col: 'col-md-6') do |f|
       .modal-body
-        = bootstrap_form_for(@assignment, layout: :horizontal, label_col: 'col-md-3', control_col: 'col-md-6') do |f|
-          %fieldset
-            = f.alert_message "Please fix the following errors:"
-            = f.text_field :title
-            = f.text_field :due_date, data: {"provide" => 'datepicker', "date-format" => "yyyy-mm-dd" }
-            = f.text_area :description, rows: 10
-            = f.number_field :point_value
-          %fieldset.control-group.col-md-offset-7
-            = f.submit "Submit", class: 'btn btn-primary'
+        %fieldset
+          = f.alert_message "Please fix the following errors:"
+          = f.text_field :title
+          = f.text_field :due_date, data: {"provide" => 'datepicker', "date-format" => "yyyy-mm-dd" }
+          = f.text_area :description, rows: 10
+          = f.number_field :point_value
+      .modal-footer
+        %fieldset.control-group.col-md-offset-7
+          = f.submit "Submit", class: 'btn btn-default btn-submit pull-left'
+          %buttton.btn.btn-default.btn-close.pull-left{ data: { dismiss: 'modal'}} Close
