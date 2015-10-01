@@ -1,0 +1,24 @@
+.modal-dialog
+  .modal-content
+    .modal-header
+      %button{type: "button", class: "close", 'data-dismiss' => "modal", 'aria-label' => "Close"}
+        %span{'aria-hidden' => 'true'} &times;
+      %h3= title
+    = bootstrap_form_for @course, remote: true, label_col: 'col-md-3', control_col: 'col-md-6' do |f|
+      .modal-body
+        .fieldset
+          = f.alert_message "Please fix the following errors:"
+          = f.text_field :title, label: "Course Title"
+          = f.text_field :code, label: "Course Code"
+          = f.text_field :location, label: "Location"
+          = f.collection_check_boxes :meeting_days, Date::DAYS_INTO_WEEK, :second, :first, inline: true
+        .fieldset.form-inline
+          = f.text_field :start_time, class: 'form-control', wrapper: { class: 'input-group clockpicker-start-time form-inline', data: { placement: 'top', donetext: "Done"}}
+          %script{ type: 'text/javascript'}
+            $('.clockpicker-start-time').clockpicker({twelvehour: true});
+          = f.text_field :end_time, class: 'form-control', wrapper: { class: 'input-group clockpicker-end-time form-inline', data: { placement: 'top', donetext: "Done"}}
+          %script{ type: 'text/javascript'}
+            $('.clockpicker-end-time').clockpicker({twelvehour: true});
+      .modal-footer
+        = f.submit class: 'btn btn-default btn-submit pull-left'
+        %buttton.btn.btn-default.btn-close.pull-left{ data: { dismiss: 'modal'}} Close

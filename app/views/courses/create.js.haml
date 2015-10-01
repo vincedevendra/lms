@@ -1,0 +1,8 @@
+- if @course.valid?
+  $('.messages-container').html("#{ j render 'shared/messages' }");
+  $('.course-cards').prepend("#{ j render 'course', course: @course.decorate}");
+  $('.modal-form').modal('hide');
+  - if current_user.courses_owned.count == 1
+    $('.no_course').hide();
+- else
+  $('.modal-form').html("#{ j render 'form', title: "New Course"}");

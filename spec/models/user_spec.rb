@@ -8,4 +8,8 @@ describe User do
   it { should validate_presence_of(:last_name) }
   it { should have_secure_password }
   it { should validate_confirmation_of(:password) }
+
+  it { should have_many(:courses_owned).class_name('Course') }
+  it { should have_many(:enrollments) }
+  it { should have_many(:courses).through(:enrollments) }
 end

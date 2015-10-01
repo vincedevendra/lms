@@ -4,6 +4,7 @@ Rails.application.routes.draw do
   root 'assignments#index'
 
   resources :assignments
+  resources :courses
 
   resources :users, only: :create
   get 'register', to: "users#new"

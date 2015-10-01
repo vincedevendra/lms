@@ -30,3 +30,10 @@ shared_examples "unless_instructor_redirect" do
     expect(response).to redirect_to root_path
   end
 end
+
+shared_examples "responds with js" do
+  it "reponsds with js" do
+    action
+    expect(response.headers["Content-Type"]).to eq "text/javascript; charset=utf-8"
+  end
+end

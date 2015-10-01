@@ -3,7 +3,7 @@ ruby '2.2.1'
 
 gem 'bootstrap-sass'
 gem 'coffee-rails'
-gem 'rails', '4.1.1'
+gem 'rails', '4.1.2'
 gem 'haml-rails'
 gem 'sass-rails'
 gem 'uglifier'
@@ -15,6 +15,7 @@ gem 'fabrication'
 gem 'faker'
 gem 'bootstrap-datepicker-rails'
 gem 'figaro'
+gem 'draper'
 
 group :development do
   gem 'thin'
@@ -33,9 +34,9 @@ group :test do
   gem 'capybara'
   gem 'launchy'
   gem 'selenium-webdriver'
+  gem 'capybara-webkit'
 end
 
 group :production do
   gem 'rails_12factor'
 end
-
