@@ -1,10 +1,11 @@
 Rails.application.routes.draw do
   get 'ui(/:action)', controller: 'ui'
 
-  root 'assignments#index'
+  root 'courses#index'
 
-  resources :assignments
-  resources :courses
+  resources :courses do
+    resources :assignments
+  end
 
   resources :users, only: :create
   get 'register', to: "users#new"

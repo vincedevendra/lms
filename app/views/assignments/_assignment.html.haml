@@ -1,0 +1,35 @@
+.well.col-sm-10.info-card{id: "assignment_#{assignment.id}"}
+  .title-bar
+    .submission-count.pull-left
+      =link_to "#", class: 'btn btn-primary btn-sm' do
+        Submissions
+        %span.badge 12
+    .dropdown.pull-right
+      %a.dropdown-toggle.hamburger{type: "button", "data-toggle" => "dropdown"}
+        %span.glyphicon.glyphicon-menu-hamburger
+      %ul.dropdown-menu
+        - if current_user.instructor?
+          %li
+            = link_to edit_course_assignment_path(assignment.course, assignment), remote: true  do
+              %span.glyphicon.glyphicon-pencil
+              Edit
+            = link_to course_assignment_path(assignment.course, assignment), method: :delete, data: { confirm: "Are you sure you want to delete this assignment?"} do
+              %span.glyphicon.glyphicon-remove
+              Delete
+        - else
+          %li
+            = link_to course_enrollment_path(@course), method: :delete, date: { confirm: "Are you sure you want to disenroll from this course?  All your assignments will be lost." } do
+              %span.glyphicon.glyphicon-remove
+              Disenroll
+    .main-text.text-center.assignment-title
+      %h3= assignment.title
+    .col-sm-3
+      %dt Due Date
+      %dd= assignment.due_date.strftime("%A, %b %d")
+      %dt Assigned On
+      %dd= assignment.created_at.strftime("%A, %b %d")
+      %dt Point Value
+      %dd= assignment.point_value
+    .col-sm-8
+      %dt Description
+      %dd= assignment.description

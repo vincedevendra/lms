@@ -11,7 +11,7 @@ def set_instructor_user
 end
 
 def current_user
-  User.find(session[:user_id]) if session[:current_user_id]
+  User.find(session[:user_id]) if session[:user_id]
 end
 
 def clear_current_user
@@ -24,4 +24,8 @@ def sign_in_user(user=nil)
   fill_in "Email", with: user.email
   fill_in "Password", with: 'password'
   click_button 'Submit'
+end
+
+def click_hamburger
+  find(:css, ".hamburger").click
 end

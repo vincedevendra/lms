@@ -6,12 +6,13 @@
     .col-md-10
       .header.instructor-title
         = link_to "#{current_user.last_name} - COURSES", "#", class: 'title'
-        = link_to new_course_path, remote: true, class: 'new-card' do
-          %span.glyphicon.glyphicon-plus
+        - if current_user.instructor?
+          = link_to new_course_path, remote: true, class: 'new-card' do
+            %span.glyphicon.glyphicon-plus
     .course-cards
       - if @courses.any?
         - @courses.each do |course|
           = render 'course', course: course
-      - else
+      - elsif current_user.instructor?
         = link_to new_course_path, remote: true, class: 'no_course' do
           %h3 Click Here to Create Your First Class (or click the plus above)

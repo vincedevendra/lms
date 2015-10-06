@@ -1,11 +1,17 @@
 class CoursesController < ApplicationController
 
-  before_action :unless_instructor_redirect
+  before_action :unless_instructor_redirect, except: :index
   before_action :find_course, only: [:edit, :update, :destroy]
   respond_to :js, :html
 
   def index
-    @courses = CourseDecorator.decorate_collection(current_user.courses_owned)
+    if current_user.instructor?
+      @courses = current_user.courses_owned
+    else
+      @courses = current_user.courses
+    end
+
+    @courses = CourseDecorator.decorate_collection(@courses)
   end
 
   def new
@@ -13,11 +19,12 @@ class CoursesController < ApplicationController
   end
 
   def create
-    @course = Course.new(course_params)
+    @course = Course.new(course_params).decorate
 
     if @course.valid?
       current_user.courses_owned << @course
       @course.save
+      @course.decorate
       flash.now[:success] = "#{@course.title} has been saved."
     end
   end

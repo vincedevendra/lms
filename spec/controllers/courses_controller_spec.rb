@@ -2,26 +2,47 @@ require 'spec_helper'
 
 describe CoursesController do
   describe "GET index" do
-    it "assigns @courses to the current instructor users's courses" do
-      instructor = Fabricate(:user, instructor: true)
-      course_1 = Fabricate(:course, instructor: instructor)
-      course_2 = Fabricate(:course, instructor: instructor)
-      set_current_user(instructor)
-      get :index
-      expect(assigns(:courses)).to match_array([course_1, course_2])
+    context "when the current user is an instructor" do
+      let(:instructor) { Fabricate(:user, instructor: true) }
+
+      before { set_current_user(instructor) }
+
+
+      it "assigns @courses to the current instructor users's courses" do
+        course_1 = Fabricate(:course, instructor: instructor)
+        course_2 = Fabricate(:course, instructor: instructor)
+        course_3 = Fabricate(:course)
+        get :index
+        expect(assigns(:courses)).to match_array([course_1, course_2])
+      end
+
+      it "orders instructor's classes by most recently created" do
+        course_1 = Fabricate(:course, instructor: instructor, created_at: 2.days.ago)
+        course_2 = Fabricate(:course, instructor: instructor)
+        get :index
+        expect(assigns(:courses)).to eq([course_2, course_1])
+      end
     end
 
-    it "orders classes by most recently created" do
-      instructor = Fabricate(:user, instructor: true)
-      course_1 = Fabricate(:course, instructor: instructor, created_at: 2.days.ago)
-      course_2 = Fabricate(:course, instructor: instructor)
-      set_current_user(instructor)
-      get :index
-      expect(assigns(:courses)).to eq([course_2, course_1])
-    end
+    context "when the current user is a student" do
+      let(:student) { Fabricate(:user) }
+      let!(:course_1) { Fabricate(:course, title: "Biology") }
+      let!(:course_2) { Fabricate(:course, title: "Algebra") }
+      let!(:course_3) { Fabricate(:course) }
 
-    it_behaves_like "unless_instructor_redirect" do
-      let(:action) { get :index }
+      before do
+        set_current_user(student)
+        student.courses << course_1 << course_2
+        get :index
+      end
+
+      it "assigns courses to the current student's courses" do
+        expect(assigns(:courses)).to match_array([course_1, course_2])
+      end
+
+      it "orders students courses according to title" do
+        expect(assigns(:courses)).to eq([course_2, course_1])
+      end
     end
   end
 

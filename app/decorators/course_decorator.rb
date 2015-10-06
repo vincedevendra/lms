@@ -14,7 +14,7 @@ class CourseDecorator < Draper::Decorator
     end
 
     if days_string.present? && times_string.present?
-      "#{days_string} #{times_string}"
+      days_string + ' ' + times_string
     elsif days_string.present?
       days_string
     elsif times_string.present?

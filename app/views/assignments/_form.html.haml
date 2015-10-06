@@ -4,7 +4,7 @@
       %button{type: "button", class: "close", 'data-dismiss' => "modal", 'aria-label' => "Close"}
         %span{'aria-hidden' => 'true'} &times;
       %h3= title
-    = bootstrap_form_for(@assignment, layout: :horizontal, label_col: 'col-md-3', control_col: 'col-md-6') do |f|
+    = bootstrap_form_for([@course, @assignment], remote: true, layout: :horizontal, label_col: 'col-md-3', control_col: 'col-md-6') do |f|
       .modal-body
         .fieldset
           = f.alert_message "Please fix the following errors:"

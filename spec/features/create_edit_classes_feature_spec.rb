@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-feature "instructor creates and edits classes", js: true, driver: :webkit do
+feature "instructor creates and edits classes", js: true do
   feature "instructor creates a course" do
     let(:instructor) { Fabricate(:instructor)}
 
@@ -12,18 +12,16 @@ feature "instructor creates and edits classes", js: true, driver: :webkit do
 
     scenario "instructor creates a course with valid input" do
       fill_in_course_fields(valid: true)
-
-      expect(page).to have_content("Philosophy of the Person (PL1070)")
+      expect(page).to have_content("Philosophy Of The Person")
     end
 
     scenario "instructor creates a course with invalid input" do
       fill_in_course_fields(valid: false)
-
       expect(page).to have_content("errors")
     end
 
     def click_new_course_link
-      find(:xpath, "//a[@href='#{new_course_path}']").click
+      find("a.new-card").click
     end
 
     def fill_in_course_fields(valid:)
@@ -57,9 +55,13 @@ feature "instructor creates and edits classes", js: true, driver: :webkit do
       expect(page).to have_content("updated")
       expect(page).to have_selector(".course_title", text: "Bar 102")
     end
-  end
 
-  def click_hamburger
-    find(:xpath, "//a[@data-toggle='dropdown']").click
+    scenario "instructor edits course with invalid inputs" do
+      fill_in "Course Title", with: ''
+      click_button "Update Course"
+      expect(page).to have_content("errors")
+      find('.btn-close').click
+      expect(page).to have_content("Foo 101")
+    end
   end
 end
