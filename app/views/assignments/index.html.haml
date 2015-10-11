@@ -3,10 +3,4 @@
   .row
     .col-md-10
       .course-title.header
-        = link_to "PL1070", "#", class: 'title'
-        - if current_user.instructor?
-          = link_to new_course_assignment_path(@course), remote: true, class: 'new-card'  do
-            %span.glyphicon.glyphicon-plus
-    .assignment-cards
-      - @assignments.each do |assignment|
-        = render 'assignment', assignment: assignment
+        = link_to @course.title, courses_path

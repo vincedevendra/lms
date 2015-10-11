@@ -1,0 +1,14 @@
+.modal-dialog
+  .modal-content
+    .modal-header
+      %button{type: "button", class: "close", 'data-dismiss' => "modal", 'aria-label' => "Close"}
+        %span{'aria-hidden' => 'true'} &times;
+      %h3= title
+    = bootstrap_form_tag url: course_enrollments_path(@course), remote: true, label_col: 'col-md-3', control_col: 'col-md-6' do |f|
+      .modal-body
+        .messages
+        .fieldset
+          = f.text_area :student_emails, rows: 10, placeholder: "Enter the email addresses you want to add to your class, separated by commas. Students will receive an email with a special url they can use to join your class."
+      .modal-footer
+        = f.submit "Submit", class: 'btn btn-default btn-submit pull-left'
+        %buttton.btn.btn-default.btn-close.pull-left{ data: { dismiss: 'modal'}} Close

@@ -16,11 +16,6 @@
             = link_to course_assignment_path(assignment.course, assignment), method: :delete, data: { confirm: "Are you sure you want to delete this assignment?"} do
               %span.glyphicon.glyphicon-remove
               Delete
-        - else
-          %li
-            = link_to course_enrollment_path(@course), method: :delete, date: { confirm: "Are you sure you want to disenroll from this course?  All your assignments will be lost." } do
-              %span.glyphicon.glyphicon-remove
-              Disenroll
     .main-text.text-center.assignment-title
       %h3= assignment.title
     .col-sm-3
