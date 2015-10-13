@@ -7,7 +7,7 @@ class EnrollmentsController < ApplicationController
 
   def destroy
     course = Course.select(:id, :title).find(params[:course_id])
-    Enrollment.find_by(user_id: current_user.id, course_id: course.id).delete
+    Enrollment.find_by(student: current_user, course: course).delete
 
     flash[:danger] = "You have been disenrolled from #{course.title}."
     redirect_to root_path

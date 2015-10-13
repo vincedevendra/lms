@@ -1,5 +1,5 @@
 class Course < ActiveRecord::Base
-  belongs_to :instructor, class_name: 'User', foreign_key: :user_id
+  belongs_to :instructor, class_name: 'User'
   has_many :enrollments
   has_many :students, through: :enrollments
   has_many :assignments

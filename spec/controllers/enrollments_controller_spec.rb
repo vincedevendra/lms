@@ -18,23 +18,35 @@ describe EnrollmentsController do
     let(:course) { Fabricate(:course) }
     let(:instructor) { Fabricate(:instructor) }
 
-    context "when all emails are validly formatted" do
+    it "renders the create js template" do
+      xhr :post, :create, course_id: course.id
+      expect(response).to render_template 'create'
+    end
+
+    context "when no emails have been inputted" do
+      it "sets a flash danger message" do
+        expext(flash[:danger]).to be_present
+      end
+    end
+
+    context "when there are some invalid, registered, unregistered emails" do
+      let(:albert) { Fabricate(:user, email: 'albert@al.bert') }
+      let(:burt) { Fabricate(:user, email: 'bu@rt.com') }
+      let(:unregistered_email) { 'Foo@bar.com' }
+      let(:invalid_email) { 'booooop' }
+
+      before do
+        xhr :post, :create, course_id: course.id,
+            student_emails:
+              "#{albert.email},#{burt.email},#{unregistered_email},
+               #{invalid_email}"
+      end
+
       after { ActionMailer::Base.deliveries.clear }
 
-      context "when all emails are already registered" do
-        let(:albert) { Fabricate(:user, email: 'albert@al.bert') }
-        let(:burt) { Fabricate(:user, email: 'bu@rt.com') }
-
-        before do
-          xhr :post, :create, course_id: course.id, student_emails: "#{albert.email}, #{burt.email}"
-        end
-
+      context "when emails are already registered" do
         it "enrolls the students in the course" do
           expect(course.reload.students.count).to eq(2)
-        end
-
-        it "sends a notification email to the student" do
-          expect(ActionMailer::Base.deliveries.count).to eq(2)
         end
 
         it "flashes a success message" do
@@ -42,42 +54,36 @@ describe EnrollmentsController do
         end
       end
 
-      context "when some emails are not already registered" do
-        let(:unregistered_email) { "Foo@bar.com" }
-        let(:albert) { Fabricate(:user, email: 'albert@al.bert') }
-
-        before do
-           xhr :post, :create, course_id: course.id, student_emails: unregistered_email + ',' + albert.email
-        end
-
+      context "when emails are not already registered" do
         it "sets a flash info message" do
           expect(flash[:info]).to be_present
         end
 
-        it "generates a invitation" do
-          expect(Invitation.count).to eq(1)
-        end
+        context "invitation sending" do
+          it "generates a invitation" do
+            expect(Invitation.count).to eq(1)
+          end
 
-        it "sends an email" do
-          binding.pry
+          it "sets the invitation's email attribute to the email" do
+            expect(Invitation.first.invitee_email).to eq(unregistered_email)
+          end
+
+          it "sets the inivitation's course_id to the course" do
+            expect(Invitation.first.course).to eq(course)
+          end
+
+          it "sends an email to the unregistered email" do
+            expect(ActionMailer::Base.deliveries.)
+          end
         end
       end
     end
 
-    context "when some emails are not validly formatted" do
-      let(:albert) { Fabricate(:user, email: 'albert@al.bert') }
-
-      before { xhr :post, :create, course_id: course.id, student_emails: "#{albert.email}, noogie"}
-
+    context "when emails are not validly formatted" do
       it "flashes a danger message" do
         expect(flash[:danger]).to include("noogie")
         expect(flash[:danger]).not_to include(albert.email)
       end
-    end
-
-    it "renders create template" do
-      xhr :post, :create, course_id: course.id
-      expect(response).to render_template 'enrollments/create'
     end
   end
 

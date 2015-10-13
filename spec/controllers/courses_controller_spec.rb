@@ -127,7 +127,7 @@ describe CoursesController do
 
     context "when the current user owns the course" do
       context "when validations pass" do
-        let(:course) { Fabricate(:course, title: "Foo 101", user_id: instructor.id) }
+        let(:course) { Fabricate(:course, title: "Foo 101", instructor: instructor) }
 
         it "updates the course" do
           xhr :patch, :update, id: course.id, course: { title: "Bar 102"}
@@ -145,7 +145,7 @@ describe CoursesController do
       end
 
       context "when validations fail" do
-        let(:course) { Fabricate(:course, title: "Foo 101", location: "Earth", user_id: instructor.id)}
+        let(:course) { Fabricate(:course, title: "Foo 101", location: "Earth", instructor: instructor) }
 
         it "does not update the class" do
           xhr :patch, :update, id: course.id, course: { title: nil, location: "Mars"}
