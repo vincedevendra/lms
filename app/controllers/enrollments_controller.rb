@@ -14,9 +14,9 @@ class EnrollmentsController < ApplicationController
   end
 
   def create
-    @course = Course.find(params[:course_id]).decorate
-    if params[:student_emails]
-      student_emails = params[:student_emails].split(',').map(&:strip)
+    @course = Course.find(params[:course_id])
+    unless params[:student_emails].blank?
+      student_emails = params[:student_emails].split(',').map(&:strip).uniq
     else
       flash.now[:danger] = "Please enter valid emails in the field below."
       render 'create'
@@ -47,6 +47,17 @@ class EnrollmentsController < ApplicationController
     unregistered_emails = valid_emails - registered_students.map(&:email)
 
     if unregistered_emails.any?
+      unregistered_emails.each do |email|
+        begin
+          token = SecureRandom.urlsafe_base64
+        end until !Invitation.select(:token).map(&:token).include?(token)
+
+        invitation =
+          Invitation.create(email: email, course: @course, token: token)
+
+        AppMailer.invite_to_join_and_enroll(invitation).deliver_later
+      end
+
       flash.now[:info] = "An invitation to join GradeBook has been sent to the following email addresses.  They will be enrolled in your course at registration:</br>#{unregistered_emails.join(", ")}".html_safe
     end
 
@@ -55,7 +66,7 @@ class EnrollmentsController < ApplicationController
     if registered_students.any?
       registered_students.each do |student|
         Enrollment.create(course: @course, student: student)
-        AppMailer.enrollment_notification(student, @course).deliver
+        AppMailer.enrollment_notification(student, @course).deliver_later
       end
 
       names = registered_students.map do |student|

@@ -12,6 +12,8 @@ module Lms
     config.filter_parameters += [:password]
     config.active_support.escape_html_entities_in_json = true
 
+    config.active_job.queue_adapter = :sidekiq
+
     config.assets.enabled = true
     config.assets.precompile += %w( bootstrap-clockpicker.min.js )
     config.generators do |g|

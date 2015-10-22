@@ -16,10 +16,14 @@ gem 'faker'
 gem 'bootstrap-datepicker-rails'
 gem 'figaro'
 gem 'draper'
+gem 'sidekiq'
+gem 'unicorn'
+gem 'responders'
 
 group :development do
   gem 'thin'
   gem "binding_of_caller"
+  gem 'letter_opener'
 end
 
 group :development, :test do

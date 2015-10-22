@@ -6,6 +6,7 @@ class User < ActiveRecord::Base
 
   validates_presence_of [:email, :password, :password_confirmation, :first_name, :last_name]
   validates_confirmation_of :password
+  validates_uniqueness_of :email
 
   def full_name
     first_name + " " + last_name

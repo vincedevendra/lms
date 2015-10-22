@@ -1,7 +1,7 @@
 class CoursesController < ApplicationController
-
   before_action :unless_instructor_redirect, except: :index
   before_action :find_course, only: [:edit, :update, :destroy]
+  before_action :no_current_user_redirect, only: :index
   respond_to :js, :html
 
   def index

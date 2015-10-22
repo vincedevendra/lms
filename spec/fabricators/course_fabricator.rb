@@ -5,4 +5,5 @@ Fabricator(:course) do
   meeting_days [1, 3, 5]
   start_time { "#{rand(1..5)}:00PM" }
   end_time { "#{rand(1..12)}:50PM" }
+  instructor
 end

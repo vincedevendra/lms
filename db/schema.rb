@@ -11,13 +11,13 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20151012145012) do
+ActiveRecord::Schema.define(version: 20151020133641) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
-  create_table "assignments", force: true do |t|
-    t.string   "title"
+  create_table "assignments", force: :cascade do |t|
+    t.string   "title",       limit: 255
     t.text     "description"
     t.datetime "created_at"
     t.datetime "updated_at"
@@ -26,35 +26,43 @@ ActiveRecord::Schema.define(version: 20151012145012) do
     t.integer  "course_id"
   end
 
-  create_table "courses", force: true do |t|
-    t.string   "title"
-    t.string   "code"
-    t.string   "location"
-    t.string   "meeting_days"
-    t.string   "start_time"
-    t.string   "end_time"
+  create_table "courses", force: :cascade do |t|
+    t.string   "title",         limit: 255
+    t.string   "code",          limit: 255
+    t.string   "location",      limit: 255
+    t.string   "meeting_days",  limit: 255
+    t.string   "start_time",    limit: 255
+    t.string   "end_time",      limit: 255
     t.text     "notes"
     t.integer  "instructor_id"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
 
-  create_table "enrollments", force: true do |t|
+  create_table "enrollments", force: :cascade do |t|
     t.integer  "student_id"
     t.integer  "course_id"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
 
-  create_table "users", force: true do |t|
+  create_table "invitations", force: :cascade do |t|
+    t.integer  "course_id"
     t.string   "email"
-    t.string   "password_digest"
-    t.string   "college_id"
+    t.string   "token"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "users", force: :cascade do |t|
+    t.string   "email",           limit: 255
+    t.string   "password_digest", limit: 255
+    t.string   "college_id",      limit: 255
     t.boolean  "instructor"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.string   "first_name"
-    t.string   "last_name"
+    t.string   "first_name",      limit: 255
+    t.string   "last_name",       limit: 255
   end
 
 end

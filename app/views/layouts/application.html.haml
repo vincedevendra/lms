@@ -11,7 +11,7 @@
     = yield :head
   %body
     %header
-      = render 'shared/header' unless current_page?(sign_in_path)
+      = render 'shared/header' unless current_page?(sign_in_path) || current_page?(register_path)
     %div
       .messages-container
         = render 'shared/messages'

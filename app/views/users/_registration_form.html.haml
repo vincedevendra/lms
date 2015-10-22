@@ -1,21 +1,40 @@
-.container
-.well.col-md-offset-2.col-md-6
-  %h3.text-center.text-primary Register
-  %br/
-  .center-block
-    = bootstrap_form_for(@user, url: url, layout: :horizontal, label_col: 'col-md-3', control_col: 'col-md-6') do |f|
-      %fieldset
-        = f.alert_message "Please fix the following errors:"
-        = f.email_field :email
-        = f.text_field :first_name
-        = f.text_field :last_name
-        = f.number_field :college_id, label: "College ID"
-        = f.password_field :password
-        = f.password_field :password_confirmation, label: "Confirm Password"
-        - if professor
-          .form-group
-            = label_tag :key, "Key", class: 'col-md-3 control-label'
-            .col-md-6
-              = text_field_tag :key, nil, class: 'form-control'
-      %fieldset.control-group.col-md-offset-7
-        = f.submit "Submit", class: 'btn btn-primary'
+%section.container
+  .row
+    .logo
+      %h3.text-center
+        %span.glyphicon.glyphicon-book
+        GradeBook
+    .col-sm-6.col-sm-offset-3
+      .panel.panel-default.login
+        .panel-body
+          %h3.text-center.title
+            Register
+            .center-block
+              = bootstrap_form_for(@user, url: url) do |f|
+                %fieldset
+                  = f.hidden_field :token, value: @invitation_token
+                  .col-sm-10.col-sm-offset-1
+                    = f.alert_message "Please fix the following errors:"
+                  .col-sm-10.col-sm-offset-1
+                    = f.email_field :email, hide_label: true, placeholder: 'Email Address', class: 'input-lg', value: @invitation_email
+                  .col-sm-10.col-sm-offset-1
+                    = f.text_field :first_name, hide_label: true, placeholder: 'First Name', class: 'input-lg'
+                  .col-sm-10.col-sm-offset-1
+                    = f.text_field :last_name, hide_label: true, placeholder: 'Last Name', class: 'input-lg'
+                  .col-sm-10.col-sm-offset-1
+                    = f.number_field :college_id, hide_label: true, placeholder: 'School ID (optional)', class: 'input-lg'
+                  .col-sm-10.col-sm-offset-1
+                    = f.password_field :password, hide_label: true, placeholder: 'Password', class: 'input-lg'
+                  .col-sm-10.col-sm-offset-1
+                    = f.password_field :password_confirmation, hide_label: true, placeholder: 'Confirm Password', class: 'input-lg'
+                  - if professor
+                    .form-group
+                      = label_tag :key, "Key", class: 'col-md-3 control-label'
+                      .col-md-6
+                        = text_field_tag :key, nil, class: 'form-control'
+                %fieldset.control-group.text-center
+                  .col-sm-10.col-sm-offset-1
+                    = f.submit "Submit", class: 'btn btn-primary btn-lg btn-block'
+        = link_to sign_in_path do
+          .panel-footer.text-center
+            %span.register Already Registered? Log in here.
