@@ -1,6 +1,6 @@
 class CoursesController < ApplicationController
   before_action :unless_instructor_redirect, except: :index
-  before_action :find_course, only: [:edit, :update, :destroy]
+  before_action :find_course, only: [:edit, :update, :show, :destroy]
   before_action :no_current_user_redirect, only: :index
   respond_to :js, :html
 
@@ -20,11 +20,11 @@ class CoursesController < ApplicationController
 
   def create
     @course = Course.new(course_params).decorate
+    @course.instructor = current_user
 
     if @course.valid?
-      current_user.courses_owned << @course
       @course.save
-      @course.decorate
+      @course
       flash.now[:success] = "#{@course.title} has been saved."
     end
   end

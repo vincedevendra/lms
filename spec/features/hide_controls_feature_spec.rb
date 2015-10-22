@@ -13,6 +13,11 @@ feature "hides controls from students" do
     expect(page).to have_selector('.new-card')
     expect(page).to have_content("Foo 101")
     expect(page).to have_selector('.hamburger')
+    find('.hamburger').click
+    expect(page).to have_content('Edit')
+    expect(page).to have_content('Delete')
+    expect(page).to have_content('Enroll Students')
+    expect(page).not_to have_content('Disenroll')
 
     visit course_assignments_path(course)
     expect(page).to have_selector('.new-card')
@@ -24,12 +29,15 @@ feature "hides controls from students" do
     sign_in_user(student)
     expect(page).not_to have_selector('.new-card')
     expect(page).to have_content("Foo 101")
-    expect(page).not_to have_selector('.hamburger')
+    find('.hamburger').click
+    expect(page).not_to have_content('Edit')
+    expect(page).not_to have_content('Delete')
+    expect(page).not_to have_content('Enroll Students')
+    expect(page).to have_content('Disenroll')
 
     visit course_assignments_path(course)
     expect(page).not_to have_selector('.new-card')
     expect(page).to have_content('Essay')
-    expect(page).not_to have_selector('.hamburger')
     expect(page).not_to have_link "Submissions"
   end
 end

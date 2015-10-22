@@ -15,11 +15,11 @@ class UsersController < ApplicationController
     @user = User.new(user_params)
 
     if @user.save
-      if params[:user][:token]
-        binding.pry
-        invitation = Invitation.find_by(token: params[:token])
+      token = params[:user][:token]
+      if token.present?
+        invitation = Invitation.find_by(token: token)
         Enrollment.create(student: @user, course: invitation.course)
-        flash[:info] = "You have been enrolled in #{invitation.course.titles}. Log in to get started."
+        flash[:info] = "You have been enrolled in #{invitation.course.decorate.display_title}. Log in to get started."
       end
 
       flash[:success] = "Thanks for registering, #{@user.full_name}!"
@@ -31,6 +31,6 @@ class UsersController < ApplicationController
 
   private
     def user_params
-      params.require(:user).permit(:email, :password, :password_confirmation, :first_name, :last_name, :college_id)
+      params.require(:user).permit(:email, :password, :password_confirmation, :first_name, :last_name, :student_id)
     end
 end

@@ -12,7 +12,7 @@ feature "instructor creates and edits classes", js: true do
 
     scenario "instructor creates a course with valid input" do
       fill_in_course_fields(valid: true)
-      expect(page).to have_content("Philosophy Of The Person")
+      expect(page).to have_content(/Philosophy Of The Person/i)
     end
 
     scenario "instructor creates a course with invalid input" do
@@ -53,7 +53,7 @@ feature "instructor creates and edits classes", js: true do
       fill_in "Course Title", with: "Bar 102"
       click_button "Update Course"
       expect(page).to have_content("updated")
-      expect(page).to have_selector(".course_title", text: "Bar 102")
+      expect(page).to have_selector(".course_title", text: /Bar 102/i)
     end
 
     scenario "instructor edits course with invalid inputs" do
@@ -61,7 +61,7 @@ feature "instructor creates and edits classes", js: true do
       click_button "Update Course"
       expect(page).to have_content("errors")
       find('.btn-close').click
-      expect(page).to have_content("Foo 101")
+      expect(page).to have_content(/Foo 101/i)
     end
   end
 end

@@ -7,6 +7,20 @@ describe UsersController do
       expect(assigns(:user)).to be_a_new(User)
     end
 
+    context 'when the params invite token is present' do
+      let(:invitation) { Fabricate(:invitation) }
+
+      it 'sets @invitation_token to the token on the invitation' do
+        get :new, token: invitation.token
+        expect(assigns(:invitation_token)).to eq(invitation.token)
+      end
+
+      it 'sets @invitation_email to the email on the invitation' do
+        get :new, token: invitation.token
+        expect(assigns(:invitation_email)).to eq(invitation.email)
+      end
+    end
+
     it_behaves_like "current_user_redirect" do
       let(:action) { get :new }
     end
@@ -14,18 +28,36 @@ describe UsersController do
 
   describe "POST create" do
     context "when validations pass" do
-      before { post :create, user: Fabricate.attributes_for(:user) }
+      context "when no invitation is present" do
+        before { post :create, user: Fabricate.attributes_for(:user) }
 
-      it "saves the new user" do
-        expect(User.count).to eq(1)
+        it "saves the new user" do
+          expect(User.count).to eq(1)
+        end
+
+        it "assigns instructor value of false" do
+          expect(User.first).not_to be_instructor
+        end
+
+        it "redirects to the sign in page" do
+          expect(response).to redirect_to sign_in_path
+        end
       end
 
-      it "assigns instructor value of false" do
-        expect(User.first).not_to be_instructor
-      end
+      context "when an invitation is present" do
+        let(:invitation) { Fabricate(:invitation) }
 
-      it "redirects to the sign in page" do
-        expect(response).to redirect_to sign_in_path
+        before do
+           post :create, user: Fabricate.attributes_for(:user).merge(token: invitation.token)
+        end
+
+        it 'creates an enrollment' do
+          expect(Enrollment.count).to eq(1)
+        end
+
+        it 'sets a flash info message' do
+          expect(flash[:info]).to be_present
+        end
       end
     end
 

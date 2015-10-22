@@ -7,6 +7,9 @@ describe CoursesController do
 
       before { set_current_user(instructor) }
 
+      it_behaves_like 'no_current_user_redirect' do
+        let(:action) { get :index }
+      end
 
       it "assigns @courses to the current instructor users's courses" do
         course_1 = Fabricate(:course, instructor: instructor)

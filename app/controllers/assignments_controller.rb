@@ -44,6 +44,6 @@ class AssignmentsController < ApplicationController
   end
 
   def find_course
-    @course = Course.find(params[:course_id])
+    @course = Course.find(params[:course_id]).decorate
   end
 end

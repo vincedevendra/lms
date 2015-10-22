@@ -1,9 +1,10 @@
 .well.col-sm-10.info-card{id: "assignment_#{assignment.id}"}
   .title-bar
     .submission-count.pull-left
-      =link_to "#", class: 'btn btn-primary btn-sm' do
-        Submissions
-        %span.badge 12
+      - if current_user.instructor?
+        =link_to "#", class: 'btn btn-primary btn-sm' do
+          Submissions
+          %span.badge 12
     .dropdown.pull-right
       %a.dropdown-toggle.hamburger{type: "button", "data-toggle" => "dropdown"}
         %span.glyphicon.glyphicon-menu-hamburger

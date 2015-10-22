@@ -19,7 +19,7 @@
               Enroll Students
         - else
           %li
-            = link_to enrollment_path(course_id: course.id), method: :delete, data: { confirm: "Are you sure you want to disenroll from this course?  All your assignments will be lost." } do
+            = link_to course_enrollment_path(course_id: course.id), method: :delete, data: { confirm: "Are you sure you want to disenroll from this course?  All your assignments will be lost." } do
               %span.glyphicon.glyphicon-remove
               Disenroll
     .main-text.text-center

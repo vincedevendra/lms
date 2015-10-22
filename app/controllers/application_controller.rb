@@ -5,8 +5,6 @@ class ApplicationController < ActionController::Base
 
   helper_method :current_user
 
-  VALID_EMAIL_REGEX = /\A[\w+\-.]+@[a-z\d\-]+(\.[a-z]+)*\.[a-z]+\z/i
-
   def current_user_redirect
     redirect_to root_path if current_user
   end
