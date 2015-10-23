@@ -4,7 +4,6 @@ class EnrollmentsController < ApplicationController
 
   def destroy
     Enrollment.find_by(student: current_user, course: @course).delete
-
     flash[:danger] = "You have been disenrolled from #{@course.title}."
     redirect_to root_path
   end
@@ -13,6 +12,7 @@ class EnrollmentsController < ApplicationController
     if no_input?
       handle_no_input and return
     end
+
     enroller = Enroller.new(params[:student_emails], @course)
     enroller.run
     enroller.messages.each do |key, message|
