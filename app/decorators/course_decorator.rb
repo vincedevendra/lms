@@ -1,5 +1,6 @@
 class CourseDecorator < Draper::Decorator
   delegate_all
+  decorates_finders
 
   def schedule
     hash = Date::DAYS_INTO_WEEK.invert

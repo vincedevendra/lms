@@ -6,7 +6,7 @@ class AssignmentsController < ApplicationController
   respond_to :html, :js
 
   def index
-    @assignments = @course.assignments.order(due_date: :desc)
+    @assignments = @course.assignments.includes(:submissions)
   end
 
   def new

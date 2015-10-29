@@ -21,6 +21,7 @@ gem 'unicorn'
 gem 'responders'
 gem 'carrierwave'
 gem 'carrierwave-aws'
+gem 'rest-client'
 
 group :development do
   gem 'thin'

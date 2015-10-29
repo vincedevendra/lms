@@ -1,8 +1,13 @@
 class SubmissionsController < ApplicationController
   before_action :no_current_user_redirect
-  before_action :get_assignment_assignments_course
+  before_action :get_assignment_and_course
+  before_action :get_assignments, except: :index
   before_action :redirect_if_not_enrolled
-  before_action :handle_no_file_chosen
+  before_action :handle_no_file_chosen, except: :index
+
+  def index
+    @students = @course.students
+  end
 
   def create
     @submission =
@@ -45,9 +50,12 @@ class SubmissionsController < ApplicationController
     end
   end
 
-  def get_assignment_assignments_course
+  def get_assignment_and_course
     @assignment = Assignment.find(params[:assignment_id])
     @course = @assignment.course.decorate
+  end
+
+  def get_assignments
     @assignments = @course.assignments
   end
 

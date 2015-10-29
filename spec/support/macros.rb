@@ -29,3 +29,8 @@ end
 def click_hamburger
   find(:css, ".hamburger").click
 end
+
+def create_submission(student, assignment)
+  Submission.create(student: student, assignment: assignment,
+                 submission: File.open("#{Rails.root}/tmp/sample.docx"))
+end

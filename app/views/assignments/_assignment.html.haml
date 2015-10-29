@@ -2,7 +2,7 @@
   .title-bar
     .submission-count.pull-left
       - if current_user.instructor?
-        =link_to "#", class: 'btn btn-primary btn-sm' do
+        =link_to course_assignment_submissions_path(course, assignment), class: 'btn btn-primary btn-sm' do
           Submissions
           %span.badge= assignment.submissions.count
     .dropdown.pull-right
