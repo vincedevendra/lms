@@ -4,7 +4,7 @@
       - if current_user.instructor?
         =link_to "#", class: 'btn btn-primary btn-sm' do
           Submissions
-          %span.badge 12
+          %span.badge= assignment.submissions.count
     .dropdown.pull-right
       %a.dropdown-toggle.hamburger{type: "button", "data-toggle" => "dropdown"}
         %span.glyphicon.glyphicon-menu-hamburger
@@ -19,13 +19,23 @@
               Delete
     .main-text.text-center.assignment-title
       %h3= assignment.title
-    .col-sm-3
+    .col-sm-4
       %dt Due Date
       %dd= assignment.due_date.strftime("%A, %b %d")
       %dt Assigned On
       %dd= assignment.created_at.strftime("%A, %b %d")
       %dt Point Value
       %dd= assignment.point_value
-    .col-sm-8
+    .col-sm-4
       %dt Description
       %dd= assignment.description
+    - unless current_user.instructor?
+      .col-sm-4
+        %dt Current Submission
+        %dd= submission.new_record? ? 'No File Uploaded' : "#{submission.submission.file.filename}"
+        %dt Choose a New File
+        %dd
+          = bootstrap_form_for([assignment.course, assignment, submission], inline_errors: false) do |f|
+            .fieldset
+              = f.file_field :submission, hide_label: true
+              = f.submit 'Upload', class: 'btn btn-xs'

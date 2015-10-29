@@ -8,4 +8,4 @@
           = link_to new_course_assignment_path(@course), remote: true, class: 'new-card' do
             %span.glyphicon.glyphicon-plus
     - @assignments.each do |assignment|
-      = render 'assignment', assignment: assignment
+      = render 'assignments/assignment', assignment: assignment, submission: Submission.find_by(user_id: current_user.id, assignment_id: assignment.id) || Submission.new

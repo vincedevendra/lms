@@ -13,4 +13,5 @@ describe User do
   it { should have_many(:courses_owned).class_name('Course') }
   it { should have_many(:enrollments) }
   it { should have_many(:courses).through(:enrollments) }
+  it { should have_many(:submissions) }
 end

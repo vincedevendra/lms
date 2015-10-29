@@ -17,7 +17,7 @@ class AssignmentsController < ApplicationController
     @assignment = Assignment.new(assignment_params.merge(course: @course))
 
     if @assignment.save
-      flash.now[:success] = "#{@assignment.title} has been saved"
+      flash.now[:success] = "#{@assignment.title} has been saved."
     end
   end
 

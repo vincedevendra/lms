@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20151022134114) do
+ActiveRecord::Schema.define(version: 20151023024215) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -52,6 +52,12 @@ ActiveRecord::Schema.define(version: 20151022134114) do
     t.string   "token"
     t.datetime "created_at"
     t.datetime "updated_at"
+  end
+
+  create_table "submissions", force: :cascade do |t|
+    t.integer "user_id"
+    t.integer "assignment_id"
+    t.string  "submission"
   end
 
   create_table "users", force: :cascade do |t|

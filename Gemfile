@@ -19,6 +19,8 @@ gem 'draper'
 gem 'sidekiq'
 gem 'unicorn'
 gem 'responders'
+gem 'carrierwave'
+gem 'carrierwave-aws'
 
 group :development do
   gem 'thin'

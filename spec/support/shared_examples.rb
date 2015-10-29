@@ -37,3 +37,20 @@ shared_examples "responds with js" do
     expect(response.headers["Content-Type"]).to eq "text/javascript; charset=utf-8"
   end
 end
+
+shared_examples 'redirects when not enrolled' do
+  context 'when the student is not enrolled in the class' do
+    before do
+      set_current_user
+      action
+    end
+
+    it 'redirects to root_path if student is not enrolled' do
+      expect(response).to redirect_to root_path
+    end
+
+    it 'flashes a warning message' do
+      expect(flash[:warning]).to be_present
+    end
+  end
+end
