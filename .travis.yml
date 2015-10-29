@@ -1,7 +1,8 @@
 language: ruby
+cache: bundler
 rvm:
   - 2.2.3
-script: rspec
+script: bundle exec rspec spec
 services:
   - postgresql
   - redis-server
