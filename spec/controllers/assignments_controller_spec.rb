@@ -2,24 +2,24 @@ require 'spec_helper'
 
 describe AssignmentsController do
   describe "GET index" do
-    before { set_current_user }
-
     let(:course) { Fabricate(:course) }
     let!(:assignment_1) { Fabricate(:assignment, due_date: 3.days.ago, course: course) }
     let!(:assignment_2) { Fabricate(:assignment, due_date: 1.day.from_now, course: course) }
 
-    it "displays all the existing belonging to the course" do
+    before do
+      set_current_user
       get :index, course_id: course.id
+    end
+
+    it "displays all the existing assignments belonging to the course" do
       expect(assigns(:assignments)).to match_array([assignment_1, assignment_2])
     end
 
     it "orders assignments by due date" do
-      get :index, course_id: course.id
       expect(assigns(:assignments)).to eq([assignment_2, assignment_1])
     end
 
     it "sets the course from the params" do
-      xhr :get, :index, course_id: course.id
       expect(assigns(:course)).to eq(course)
     end
 

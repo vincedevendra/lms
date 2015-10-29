@@ -1,0 +1,30 @@
+%section.container.assignments
+  .row
+    .col-md-12
+      .header
+        Essay 1 - Philosophy of the Person
+      %table.table.table-hover
+        %thead
+          %tr.text-center
+            %th First Name
+            %th Last Name
+            %th Student ID
+            %th Submission Date
+            %th View and Comment
+            %th Download
+            %th Grade (Out of 10)
+        %tbody
+          - 30.times do
+            %tr
+              %td Pete
+              %td Peterson
+              %td 61527
+              %td 10/15/2015
+              %td
+                %span.glyphicon.glyphicon-eye-open
+              %td
+                = link_to '#', class: 'disabled' do
+                  %span.glyphicon.glyphicon-download-alt
+              %td
+                %input.form-control.input-sm.pull-left
+                %button.btn.btn-sm.btn-primary Submit

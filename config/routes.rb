@@ -4,7 +4,9 @@ Rails.application.routes.draw do
   root 'courses#index'
 
   resources :courses do
-    resources :assignments
+    resources :assignments do
+      resources :submissions
+    end
     resources :enrollments, only: [:new, :create]
     delete 'enrollments', to: 'enrollments#destroy', as: 'enrollment'
   end

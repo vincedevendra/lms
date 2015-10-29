@@ -20,4 +20,5 @@
 /config/application.yml
 
 /config/database.yml
-dump.rdb
+/dump.rdb
+/public/uploads
