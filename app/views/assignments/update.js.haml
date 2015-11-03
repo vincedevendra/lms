@@ -1,6 +1,6 @@
 - if @assignment.valid?
   $('.messages-container').html("#{ j render 'shared/messages' }");
-  $("#assignment_#{@assignment.id}").replaceWith("#{ j render 'assignment', assignment: @assignment }");
+  $("#assignment_#{@assignment.id}").replaceWith("#{ j render 'assignment', assignment: @assignment, submission: @assignment.existing_or_new_submission(current_user), course: @course }");
   $('.modal-form').modal('hide');
 - else
   $('.modal-form').html("#{ j render 'form', title: "Edit Assignment"}")

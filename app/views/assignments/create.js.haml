@@ -1,6 +1,6 @@
 - if @assignment.valid?
   $('.messages-container').html("#{ j render 'shared/messages' }");
-  $('.assignment-cards').prepend("#{ j render 'assignment', assignment: @assignment}");
+  $('.assignment-cards').prepend("#{ j render 'assignment', assignment: @assignment, submission: Submission.new, course: @course}");
   $('.modal-form').modal('hide');
 - else
   $('.modal-form').html("#{ j render 'form', title: "New Assignment"}");

@@ -14,5 +14,8 @@ development:
 
 test:
   adapter: postgresql
-  database: travis_ci_test
-  username: postgres
+  encoding: unicode
+  database: lms_development
+  pool: 5
+  username: vincent
+  password:
