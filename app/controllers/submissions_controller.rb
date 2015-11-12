@@ -1,17 +1,15 @@
 class SubmissionsController < ApplicationController
   before_action :no_current_user_redirect
   before_action :get_assignment_and_course
-  before_action :get_assignments, except: :index
+  before_action :get_assignments
   before_action :redirect_if_not_enrolled
-  before_action :handle_no_file_chosen, except: :index
-
-  def index
-    @students = @course.students
-  end
+  before_action :handle_no_file_chosen
 
   def create
     @submission =
-      Submission.new(submission_params.merge!(student: current_user, assignment: @assignment))
+      Submission.new(submission_params.merge!(student: current_user,
+                                              assignment: @assignment,
+                                              submitted_at: Time.now))
 
     if @submission.save
       @assignment.submissions << @submission
@@ -25,8 +23,7 @@ class SubmissionsController < ApplicationController
 
   def update
     @submission = Submission.find(params[:id])
-
-    if @submission.update(submission_params)
+    if @submission.update(submission_params.merge!(submitted_at: Time.now))
       flash[:success] = 'Your file has been uploaded.'
       redirect_to course_assignments_path(@course)
     else
@@ -50,17 +47,12 @@ class SubmissionsController < ApplicationController
     end
   end
 
-  def get_assignment_and_course
-    @assignment = Assignment.find(params[:assignment_id])
-    @course = @assignment.course.decorate
-  end
-
   def get_assignments
     @assignments = @course.assignments
   end
 
   def redirect_if_not_enrolled
-    unless Enrollment.find_by(student: current_user, course: @course)
+    unless Enrollment.find_by(student: current_user, course: @course) || current_user.instructor?
       flash[:warning] = 'Access denied'
       redirect_to root_path
     end

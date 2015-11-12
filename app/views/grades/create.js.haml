@@ -1,0 +1,4 @@
+- if @submission.valid?
+  $("#grade_#{@submission.id}").html("#{ j render 'grades/edit_link', submission: @submission}")
+- else
+  $('.messages-container').html("#{ j render 'shared/messages' }")

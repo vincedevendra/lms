@@ -11,19 +11,20 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20151029171358) do
+ActiveRecord::Schema.define(version: 20151112142242) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
   create_table "assignments", force: :cascade do |t|
-    t.string   "title",       limit: 255
+    t.string   "title",               limit: 255
     t.text     "description"
     t.datetime "created_at"
     t.datetime "updated_at"
     t.integer  "point_value"
     t.date     "due_date"
     t.integer  "course_id"
+    t.boolean  "submission_required"
   end
 
   create_table "courses", force: :cascade do |t|
@@ -60,6 +61,8 @@ ActiveRecord::Schema.define(version: 20151029171358) do
     t.string   "submission"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.integer  "grade"
+    t.datetime "submitted_at"
   end
 
   create_table "users", force: :cascade do |t|

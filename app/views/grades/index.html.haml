@@ -22,7 +22,7 @@
             %th Submission Date
             -# %th View and Comment
             %th Download
-            %th Grade (Out of 10)
+            %th Grade (Out of #{@assignment.point_value})
         %tbody
           - if @student_submissions.any?
             - @student_submissions.each do |student_submission|

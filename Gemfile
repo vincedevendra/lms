@@ -27,12 +27,13 @@ group :development do
   gem 'thin'
   gem "binding_of_caller"
   gem 'letter_opener'
+  gem 'rails-erd'
 end
 
 group :development, :test do
   gem 'pry'
   gem 'pry-nav'
-  gem 'rspec-rails', '2.99'
+  gem 'rspec-rails'
 end
 
 group :test do
@@ -43,6 +44,8 @@ group :test do
   gem 'selenium-webdriver'
   gem 'capybara-webkit'
   gem 'capybara-email'
+  gem 'vcr'
+  gem 'webmock'
 end
 
 group :production do

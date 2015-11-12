@@ -12,14 +12,4 @@ class User < ActiveRecord::Base
   def full_name
     first_name + " " + last_name
   end
-
-  def assignment_submission(assignment)
-    submissions.bsearch { |submission| submission.assignment == assignment }
-  end
-
-  def display_submission_time(assignment)
-    assignment_submission(assignment)
-      .try(:updated_at)
-      .try(:strftime, '%d %b %Y%l:%M %p')
-  end
 end

@@ -30,7 +30,10 @@ def click_hamburger
   find(:css, ".hamburger").click
 end
 
-def create_submission(student, assignment)
+def create_submission(student=nil, assignment=nil)
+  student ||= Fabricate(:user)
+  assignment ||= Fabricate(:assignment)
   Submission.create(student: student, assignment: assignment,
-                 submission: File.open("#{Rails.root}/tmp/sample.docx"))
+                    submission: File.open("#{Rails.root}/tmp/sample.docx"),
+                    submitted_at: Time.now)
 end

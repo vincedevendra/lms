@@ -79,7 +79,7 @@ describe EnrollmentsController do
     end
 
     it "disenrolls the student from the course" do
-      expect(student.courses).not_to include(course)
+      expect(student.reload.courses).not_to include(course)
     end
 
     it "redirects to the root path" do

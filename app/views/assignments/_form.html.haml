@@ -12,6 +12,7 @@
           = f.text_field :due_date, data: {"provide" => 'datepicker', "date-format" => "yyyy-mm-dd" }
           = f.text_area :description, rows: 10
           = f.number_field :point_value
+          -# = f.checkbox :submission_required, label: "Require Online Submission?"
       .modal-footer
         %fieldset.control-group.col-md-offset-7
           = f.submit "Submit", class: 'btn btn-default btn-submit pull-left'

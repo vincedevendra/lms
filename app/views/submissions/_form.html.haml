@@ -1,0 +1,4 @@
+= bootstrap_form_tag url: grades_path, remote: true do |f|
+  = f.hidden_field :submission, value: submission.id
+  = f.text_field :grade, class: 'input-sm pull-left', hide_label: true, value: submission.grade
+  = f.submit 'Submit', class: 'btn btn-sm btn-default'

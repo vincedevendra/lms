@@ -1,33 +1,26 @@
-class KamiWrapper
-  TOKEN = ENV['KAMI_API_KEY']
-  EMBED_URL = 'https://api.notablepdf.com/embed/documents'
+class BoxViewWrapper
+  TOKEN = ENV['BOX_VIEW_API_KEY']
+  UPLOAD_URL = 'https://view-api.box.com/1/documents'
   VIEW_URL = 'https://api.notablepdf.com/embed/sessions'
 
-  attr_reader :submission
-
-  def initialize(submission, user)
-    @submission = submission
-    @user = user
-  end
-
-  def upload
+  def self.upload(file_url, file_name)
     values = {
-      "document_url" => submission.url,
-      "name" => submission.file.filename
+      "url" => file_url,
+      "name" => file_name
     }.to_json
 
     headers = {
-      :content_type => 'application/json',
-      :authorization => "Token #{TOKEN}"
+      "Content-Type" => 'application/json',
+      "Authorization" => "Token #{TOKEN}"
     }
 
-    JSON[RestClient.post EMBED_URL, values, headers]
+    JSON[RestClient.post(UPLOAD_URL, values, headers)]
   end
 
-  def status
+  def status(box_view_id)
     headers = { :authorization => "Token #{TOKEN}" }
 
-    JSON[RestClient.get(EMBED_URL + "/#{submission.kami_id}"), headers]
+    JSON[RestClient.get(EMBED_URL + "/#{box_view_id}"), headers]
   end
 
   def view_url

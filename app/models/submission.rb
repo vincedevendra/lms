@@ -5,4 +5,8 @@ class Submission < ActiveRecord::Base
   belongs_to :assignment
 
   validates_presence_of [:submission, :user_id, :assignment_id]
+
+  def display_submitted_at_time
+    submitted_at.strftime('%d %b %Y%l:%M %p')
+  end
 end

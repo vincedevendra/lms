@@ -1,0 +1,26 @@
+%section.container.assignments
+  .row
+    .col-md-12
+      .header
+        .col-sm-3
+          Course:
+          %br
+          Assignment:
+        .col-sm-9
+          = @course.display_title
+          %br
+          = @assignment.title.titleize
+      .assignment-info
+        .col-sm-12
+          Due Date: #{@assignment.due_date.strftime('%b %d, %Y')}
+      %table.table.table-hover
+        %thead
+          %tr.text-center
+            %th First Name
+            %th Last Name
+            %th Student ID
+            - if @assignment.submission_required?
+              %th Submission Date
+              -# %th View and Comment
+              %th Download
+            %th Grade (Out of #{@assignment.point_value})
