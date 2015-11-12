@@ -34,6 +34,7 @@ group :development, :test do
   gem 'pry'
   gem 'pry-nav'
   gem 'rspec-rails'
+  gem 'codeclimate-test-reporter', require: nil
 end
 
 group :test do
