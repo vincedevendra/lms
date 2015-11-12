@@ -18,7 +18,7 @@ describe Course do
 
     before{ course.students << student_1 << student_2 }
 
-    subject{ course.students_with_submissions(assignment) }
+    subject{ course.reload.students_with_submissions(assignment) }
 
     it 'retrieves all students enrolled in the class' do
       expect(subject).to match_array [student_1, student_2]
@@ -26,7 +26,7 @@ describe Course do
 
     it 'retrieves only submissions for the given assignment' do
       expect(student_1.submissions.count).to eq(2)
-      expect(subject.first.submissions).to eq([submission])
+      expect(subject.find{ |student| student.id == student_1.id }.submissions).to eq([submission])
     end
   end
 end
