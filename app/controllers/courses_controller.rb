@@ -24,9 +24,12 @@ class CoursesController < ApplicationController
 
     if @course.valid?
       @course.save
-      @course
       flash.now[:success] = "#{@course.title} has been saved."
     end
+  end
+
+  def show
+    @course = Course.includes(assignments: [:submissions], students: [:submissions]).find(params[:id]).decorate
   end
 
   def update
@@ -52,6 +55,6 @@ class CoursesController < ApplicationController
   end
 
   def find_course
-    @course = Course.find(params[:id])
+    @course = Course.find(params[:id]).decorate
   end
 end

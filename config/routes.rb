@@ -4,6 +4,7 @@ Rails.application.routes.draw do
   root 'courses#index'
 
   resources :courses do
+    get 'grade_report', on: :member, to: 'courses#show'
     resources :assignments do
       resources :submissions, only: [:create, :update, :show]
       get 'grade', on: :member, to: 'grades#index'

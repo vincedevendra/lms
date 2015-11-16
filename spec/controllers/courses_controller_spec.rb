@@ -106,19 +106,40 @@ describe CoursesController do
     end
   end
 
-   describe "GET edit" do
-     before { set_instructor_user }
+  describe 'GET show' do
+    let(:instructor){ Fabricate(:instructor) }
+    let(:course){ Fabricate(:course) }
+    let!(:assignment_1){ Fabricate(:assignment, course: course) }
+    let!(:assignment_2){ Fabricate(:assignment, course: course) }
+    let(:student_1){ Fabricate(:user) }
+    let(:student_2){ Fabricate(:user) }
+    let(:assignment_1){ Fabricate(:assignment, course: course) }
+    let(:assignment_2){ Fabricate(:assignment, course: course) }
 
-     it "sets @course based on the params" do
-       course = Fabricate(:course)
-       xhr :get, :edit, id: course.id, format: :js
-       expect(assigns(:course)).to eq(course)
-     end
+    before do
+      set_current_user(instructor)
+      course.students << student_1 << student_2
+    end
 
-     it_behaves_like "unless_instructor_redirect" do
-       let(:action) { xhr :get, :edit, id: 1 }
-     end
-   end
+    it "sets @course from the params" do
+      get :show, id: course.id
+      expect(assigns(:course)).to eq(course.decorate)
+    end
+  end
+
+  describe "GET edit" do
+    before { set_instructor_user }
+
+    it "sets @course based on the params" do
+      course = Fabricate(:course)
+      xhr :get, :edit, id: course.id, format: :js
+      expect(assigns(:course)).to eq(course)
+    end
+
+    it_behaves_like "unless_instructor_redirect" do
+      let(:action) { xhr :get, :edit, id: 1 }
+    end
+  end
 
   describe "POST update" do
     let(:instructor) { Fabricate(:instructor) }

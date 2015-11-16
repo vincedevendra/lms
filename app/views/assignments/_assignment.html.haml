@@ -3,11 +3,11 @@
     .submission-count.pull-left
       - if current_user.instructor?
         - if assignment.submission_required?
-          =link_to course_assignment_submissions_path(course, assignment), class: 'btn btn-primary btn-sm' do
+          =link_to grade_course_assignment_path(course, assignment), class: 'btn btn-primary btn-sm' do
             Submissions
             %span.badge= assignment.submissions.count
         - else
-          =link_to "Input Grades", course_assignment_submissions_path(course, assignment), class: 'btn btn-primary btn-sm'
+          =link_to "Input Grades", grade_course_assignment_path(course, assignment), class: 'btn btn-primary btn-sm'
     .dropdown.pull-right
       %a.dropdown-toggle.hamburger{type: "button", "data-toggle" => "dropdown"}
         %span.glyphicon.glyphicon-menu-hamburger

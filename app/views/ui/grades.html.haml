@@ -1,0 +1,42 @@
+%section.container
+  .row
+    .col-md-12
+      .header Course: Philosophy 101
+      %table.table.table-hover
+        %thead
+          %tr.text-center
+            %th First Name
+            %th Last Name
+            %th Student ID
+            %th Essay 1 (10)
+            %th Essay 2 (10)
+            %th Attendance (10)
+            %th Midterm (35)
+            %th Final (35)
+            %th Course Average
+            %th Course Grade
+        %tbody
+          - 20.times do
+            %tr
+              %td Pete
+              %td McGillicutty
+              %td 12039847
+              %td 9
+              %td 8
+              %td 8
+              %td 32
+              %td 29
+              %td 87
+              %td B
+        %tfoot
+          %tr
+            %td Course Averages
+            - 2.times do
+              %td
+            %td 9
+            %td 8
+            %td 8
+            %td 32
+            %td 29
+            %td 87
+            %td B

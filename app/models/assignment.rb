@@ -11,4 +11,8 @@ class Assignment < ActiveRecord::Base
   def existing_or_new_submission(student)
     student_submission(student) || Submission.new
   end
+
+  def average_grade
+    submissions.average(:grade).round(1)
+  end
 end
