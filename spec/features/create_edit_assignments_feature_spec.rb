@@ -14,8 +14,13 @@ feature "instructor creates and edits assignments", js: true do
 
     scenario "instructor creates assignment with valid input" do
       expect(page).to have_content("New Assignment")
-      fill_in_assignment_fields(valid: true)
+      fill_in_assignment_fields(valid: true, title: "Essay 1")
       expect(page).to have_content("Essay 1")
+    end
+
+    scenario 'instructor checks submission required box' do
+      fill_in_assignment_fields(valid: true, submission_required: true)
+      expect(page).to have_content("Online Submission Required? true")
     end
 
     scenario "instructor creates assignment with invalid input" do
@@ -23,11 +28,12 @@ feature "instructor creates and edits assignments", js: true do
       expect(page).to have_content("errors")
     end
 
-    def fill_in_assignment_fields(valid:)
-      fill_in "Title", with: "Essay 1" if valid
+    def fill_in_assignment_fields(valid:, title: "Essay 1", submission_required: false)
+      fill_in "Title", with: title if valid
       fill_in "Due date", with: "2017-11-20"
       fill_in "Description", with: "Argle Bargle"
       fill_in "Point value", with: "20"
+      check "Require Online Submission?" if submission_required
       click_button "Submit"
     end
   end

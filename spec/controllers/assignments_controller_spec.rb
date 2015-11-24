@@ -44,21 +44,33 @@ describe AssignmentsController do
     before { set_instructor_user }
 
     context "when the post passes validations" do
-      before { xhr :post, :create, assignment: Fabricate.attributes_for(:assignment), course_id: course.id }
-
       it "creates a new assignment object" do
+        xhr :post, :create, assignment: Fabricate.attributes_for(:assignment), course_id: course.id
         expect(Assignment.count).to eq(1)
       end
 
+      it 'sets submission_required to true when chechbox is checked' do
+        xhr :post, :create, assignment: Fabricate.attributes_for(:assignment, submission_required: 1), course_id: course.id
+        expect(Assignment.first).to be_submission_required
+      end
+
+      it 'sets submission_required to false when checkbox is not checked' do
+        xhr :post, :create, assignment: Fabricate.attributes_for(:assignment, submission_required: 0), course_id: course.id
+        expect(Assignment.first).not_to be_submission_required
+      end
+
       it "associates the assignment with the current course" do
+        xhr :post, :create, assignment: Fabricate.attributes_for(:assignment), course_id: course.id
         expect(Assignment.last.course).to eq(course)
       end
 
       it "sets a success message" do
+        xhr :post, :create, assignment: Fabricate.attributes_for(:assignment), course_id: course.id
         expect(flash[:success]).to be_present
       end
 
       it "renders the create js template" do
+        xhr :post, :create, assignment: Fabricate.attributes_for(:assignment), course_id: course.id
         expect(response).to render_template "assignments/create"
       end
     end

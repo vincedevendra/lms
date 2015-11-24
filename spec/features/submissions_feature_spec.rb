@@ -1,19 +1,37 @@
 require 'spec_helper'
 
 feature 'student uploads and updates submission' do
-  given(:course) { Fabricate(:course) }
-  given!(:assignment) { Fabricate(:assignment, course: course) }
-  given(:student) { Fabricate(:user) }
-  given(:instructor) { Fabricate(:instructor) }
+  feature "upload form hidden when assignment doesn't require submission" do
+    given(:course) { Fabricate(:course) }
+    given(:student) { Fabricate(:user) }
+    given(:instructor) { Fabricate(:instructor) }
+    given!(:assignment) { Fabricate(:assignment, course: course, submission_required: false) }
 
-  background do
-    student.courses << course
-    instructor.courses_owned << course
-    sign_in_user(student)
-    visit course_assignments_path(course)
+    background do
+      student.courses << course
+      instructor.courses_owned << course
+      sign_in_user(student)
+      visit course_assignments_path(course)
+    end
+
+    scenario 'it hides the submisison form from student' do
+      expect(page).to have_content "Choose a New File"
+    end
   end
 
   feature 'student uploads submission' do
+    given(:course) { Fabricate(:course) }
+    given(:student) { Fabricate(:user) }
+    given(:instructor) { Fabricate(:instructor) }
+    given!(:assignment) { Fabricate(:assignment, course: course, submission_required: false) }
+
+    background do
+      student.courses << course
+      instructor.courses_owned << course
+      sign_in_user(student)
+      visit course_assignments_path(course)
+    end
+
     context 'when the student is enrolled in the class' do
       scenario 'student does not choose a file to upload' do
         expect_msg_and_no_create_when_blank
@@ -36,7 +54,18 @@ feature 'student uploads and updates submission' do
   end
 
   feature 'student changes submission' do
-    background { upload_valid_file }
+    given(:course) { Fabricate(:course) }
+    given(:student) { Fabricate(:user) }
+    given(:instructor) { Fabricate(:instructor) }
+    given!(:assignment) { Fabricate(:assignment, course: course, submission_required: false) }
+
+    background do
+      student.courses << course
+      instructor.courses_owned << course
+      sign_in_user(student)
+      visit course_assignments_path(course)
+      upload_valid_file
+    end
 
     scenario 'student does not choose a file to upload' do
       expect(page).to have_content 'sample.docx'

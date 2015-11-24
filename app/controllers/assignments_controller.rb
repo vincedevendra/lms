@@ -39,7 +39,7 @@ class AssignmentsController < ApplicationController
   private
 
   def assignment_params
-    params.require(:assignment).permit(:title, :description, :point_value, :due_date)
+    params.require(:assignment).permit(:title, :description, :point_value, :due_date, :submission_required)
   end
 
   def find_assignment

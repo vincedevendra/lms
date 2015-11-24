@@ -4,10 +4,10 @@
       - if current_user.instructor?
         - if assignment.submission_required?
           =link_to grade_course_assignment_path(course, assignment), class: 'btn btn-primary btn-sm' do
-            Submissions
+            Grade Submissions
             %span.badge= assignment.submissions.count
         - else
-          =link_to "Input Grades", grade_course_assignment_path(course, assignment), class: 'btn btn-primary btn-sm'
+          =link_to "Grade Assignment", grade_course_assignment_path(course, assignment), class: 'btn btn-primary btn-sm'
     .dropdown.pull-right
       %a.dropdown-toggle.hamburger{type: "button", "data-toggle" => "dropdown"}
         %span.glyphicon.glyphicon-menu-hamburger
@@ -29,10 +29,12 @@
       %dd= assignment.created_at.strftime("%A, %b %d")
       %dt Point Value
       %dd= assignment.point_value
+      %dt Online Submission Required?
+      %dd= assignment.submission_required
     .col-sm-4
       %dt Description
       %dd= assignment.description
-    - unless current_user.instructor?
+    - unless current_user.instructor? && assignment.submission_required?
       .col-sm-4
         %dt Current Submission
         %dd= submission.new_record? ? 'No File Uploaded' : "#{submission.submission.file.filename}"
