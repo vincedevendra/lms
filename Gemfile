@@ -28,6 +28,8 @@ group :development do
   gem "binding_of_caller"
   gem 'letter_opener'
   gem 'rails-erd'
+  gem 'quiet_assets'
+  gem 'bullet'
 end
 
 group :development, :test do

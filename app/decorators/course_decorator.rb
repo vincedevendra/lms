@@ -7,7 +7,8 @@ class CourseDecorator < Draper::Decorator
     hash[3] = 'R'
 
     if object.meeting_days
-      days_string = object.meeting_days.map { |day_num| hash[day_num].to_s.first.capitalize }.join
+      days_string = object.meeting_days.map do |day_num| hash[day_num].to_s.first.capitalize
+      end.join
     end
 
     if object.start_time? && object.end_time?

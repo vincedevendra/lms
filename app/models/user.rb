@@ -13,22 +13,9 @@ class User < ActiveRecord::Base
     first_name + " " + last_name
   end
 
-  def grade_for(assignment)
+  def get_grade_for(assignment)
     submissions.find do |submission|
       submission.assignment_id == assignment.id
     end.try(:grade)
-  end
-
-  def course_average(course)
-    if submissions.any?
-      course_assignment_ids = course.assignments.map(&:id)
-      course_submissions = submissions.select do |submission|
-        course_assignment_ids.include?(submission.assignment_id)
-      end
-
-      possible_points = course.assignments.map(&:point_value).inject(:+)
-      actual_points = submissions.map(&:grade).compact.inject(:+)
-      "#{((actual_points.to_f / possible_points.to_f) * 100).round(1)} %"
-    end
   end
 end

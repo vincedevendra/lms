@@ -8,8 +8,8 @@
             %th First Name
             %th Last Name
             %th Student ID
-            - @course.assignments.each do |assignment|
-              %th= "#{assignment.title.titleize} (#{assignment.point_value})"
+            - @assignments.each do |assignment|
+              %th= assignment.display_title_with_point_value
             %th Course Average
             %th Course Grade
         %tbody
@@ -20,17 +20,22 @@
               %td= student.student_id
               - @course.assignments.each do |assignment|
                 %td= student.grade_for(assignment)
-              %td= student.course_average(@course)
-              %td B
-              -# %td= student.course_letter_grade(@course)
+              %td= student.display_course_average
+              %td= student.course_letter_grade
         %tfoot
           %tr
             %td Course Averages
             - 2.times do
               %td
-            - @course.assignments.each do |assignment|
-              %td= assignment.average_grade
-            %td
-            -# %td= @course.average_grade
-            %td B
-            -# %td= @course.average_letter_grade
+            - @assignments.each do |assignment|
+              %td= assignment.display_average_grade
+            %td= @course.display_average_grade
+            %td= @course.avg_letter_grade
+          %tr
+            %td Course Median
+            - 2.times do
+              %td
+            - @assignments.each do |assignment|
+              %td= assignment.median_grade
+            %td= @course.display_median_grade
+            %td= @course.median_letter_grade

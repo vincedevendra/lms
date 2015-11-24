@@ -2,11 +2,14 @@ class AssignmentsController < ApplicationController
   before_action :no_current_user_redirect, only: :index
   before_action :unless_instructor_redirect, except: :index
   before_action :find_assignment, only: [:edit, :update, :destroy]
-  before_action :find_course, only: [:index, :new, :edit, :create, :update]
+  before_action :find_course, only: [:new, :edit, :create, :update]
   respond_to :html, :js
 
   def index
-    @assignments = @course.assignments.includes(:submissions)
+    @course = Course
+                .includes(assignments: [submissions: :student])
+                .find(params[:course_id])
+                .decorate
   end
 
   def new

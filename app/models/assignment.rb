@@ -13,6 +13,20 @@ class Assignment < ActiveRecord::Base
   end
 
   def average_grade
-    submissions.average(:grade).round(1)
+    submissions.average(:grade)
+  end
+
+  def median_grade
+    return if submissions.empty?
+
+    grades = submissions.map(&:grade).compact.sort
+    length = grades.length
+    return nil if length.zero?
+
+    if length.odd?
+      grades[(length / 2)]
+    else
+      (grades[(length / 2) - 1] + grades[(length / 2)]) / 2.0
+    end
   end
 end

@@ -12,7 +12,7 @@
           = @assignment.title.titleize
       .assignment-info
         .col-sm-12
-          Due Date: #{@assignment.due_date.strftime('%b %d, %Y')}
+          Due Date: #{@assignment.display_due_date}
       %table.table.table-hover
         %thead
           %tr.text-center

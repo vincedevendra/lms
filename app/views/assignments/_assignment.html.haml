@@ -14,10 +14,10 @@
       %ul.dropdown-menu
         - if current_user.instructor?
           %li
-            = link_to edit_course_assignment_path(assignment.course, assignment), remote: true  do
+            = link_to edit_course_assignment_path(course, assignment), remote: true  do
               %span.glyphicon.glyphicon-pencil
               Edit
-            = link_to course_assignment_path(assignment.course, assignment), method: :delete, data: { confirm: "Are you sure you want to delete this assignment?"} do
+            = link_to course_assignment_path(course, assignment), method: :delete, data: { confirm: "Are you sure you want to delete this assignment?"} do
               %span.glyphicon.glyphicon-remove
               Delete
     .main-text.text-center.assignment-title
@@ -38,7 +38,7 @@
         %dd= submission.new_record? ? 'No File Uploaded' : "#{submission.submission.file.filename}"
         %dt Choose a New File
         %dd
-          = bootstrap_form_for([assignment.course, assignment, submission], inline_errors: false) do |f|
+          = bootstrap_form_for([course, assignment, submission], inline_errors: false) do |f|
             .fieldset
               = f.file_field :submission, hide_label: true
               = f.submit 'Upload', class: 'btn btn-xs'

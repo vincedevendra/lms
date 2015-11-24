@@ -19,17 +19,22 @@ class CoursesController < ApplicationController
   end
 
   def create
-    @course = Course.new(course_params).decorate
+    @course = Course.new(course_params)
     @course.instructor = current_user
 
     if @course.valid?
-      @course.save
+      @course.save.decorate
       flash.now[:success] = "#{@course.title} has been saved."
     end
   end
 
   def show
-    @course = Course.includes(assignments: [:submissions], students: [:submissions]).find(params[:id]).decorate
+    course = Course
+               .includes(assignments: [:submissions], students: [:submissions])
+               .find(params[:id])
+    course_grade_tracker = GradeTracker::Course.new(course)
+    @course = CourseWithGrades.new(course_grade_tracker)
+    @assignments = AssignmentDecorator.decorate_collection(@course.assignments)
   end
 
   def update
@@ -51,7 +56,9 @@ class CoursesController < ApplicationController
   private
 
   def course_params
-    params.require(:course).permit(:title, :code, :location, {meeting_days: []}, :start_time, :end_time, :notes)
+    params.require(:course).permit(:title, :code, :location,
+      { meeting_days: [] },
+                  :start_time, :end_time, :notes)
   end
 
   def find_course

@@ -1,7 +1,7 @@
 class Course < ActiveRecord::Base
   belongs_to :instructor, class_name: 'User'
   has_many :enrollments
-  has_many :students, through: :enrollments, -> { order(:last_name) }
+  has_many :students, -> { order(last_name: :asc) }, through: :enrollments
   has_many :assignments, -> { order(due_date: :desc) }
   has_many :invitations
   serialize :meeting_days
@@ -21,11 +21,5 @@ class Course < ActiveRecord::Base
       .where("submissions.id IS NULL OR submissions.assignment_id = ?",
              assignment.id)
       .references(:submissions)
-  end
-
-  def average_grade
-    students
-      .map{ |student| student.course_average(self) }
-      .inject(:+)
   end
 end
