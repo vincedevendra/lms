@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe CourseWithGrades
+describe CourseWithGrades do
   describe '#students' do
     it 'wraps course grade tracker students to student with course grade objects' do
       course_grade_tracker = double()

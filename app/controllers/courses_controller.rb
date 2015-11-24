@@ -23,8 +23,9 @@ class CoursesController < ApplicationController
     @course.instructor = current_user
 
     if @course.valid?
-      @course.save.decorate
-      flash.now[:success] = "#{@course.title} has been saved."
+      @course.save
+      @course = @course.decorate
+      flash.now[:success] = "#{@course.display_title} has been saved."
     end
   end
 

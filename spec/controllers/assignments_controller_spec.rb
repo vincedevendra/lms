@@ -11,14 +11,6 @@ describe AssignmentsController do
       get :index, course_id: course.id
     end
 
-    it "displays all the existing assignments belonging to the course" do
-      expect(assigns(:assignments)).to match_array([assignment_1, assignment_2])
-    end
-
-    it "orders assignments by due date" do
-      expect(assigns(:assignments)).to eq([assignment_2, assignment_1])
-    end
-
     it "sets the course from the params" do
       expect(assigns(:course)).to eq(course)
     end
