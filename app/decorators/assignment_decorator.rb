@@ -6,7 +6,7 @@ class AssignmentDecorator < Draper::Decorator
   end
 
   def display_average_grade
-    object.average_grade.round(1)
+    object.average_grade.try(:round, 1)
   end
 
   def display_due_date

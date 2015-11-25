@@ -48,7 +48,7 @@ module GradeTracker
         @assignment_grades ||= {}
 
         @course.assignments.each do |assignment|
-          @assignment_grades[assignment.id] = @student.get_grade_for(assignment)
+          @assignment_grades[assignment.id] = @student.grade_for(assignment).try(:points)
         end
 
         @assignment_grades

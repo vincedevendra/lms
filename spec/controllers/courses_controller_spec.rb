@@ -107,23 +107,33 @@ describe CoursesController do
   end
 
   describe 'GET show' do
-    let(:instructor){ Fabricate(:instructor) }
-    let(:course){ Fabricate(:course) }
-    let!(:assignment_1){ Fabricate(:assignment, course: course) }
-    let!(:assignment_2){ Fabricate(:assignment, course: course) }
-    let(:student_1){ Fabricate(:user) }
-    let(:student_2){ Fabricate(:user) }
-    let(:assignment_1){ Fabricate(:assignment, course: course) }
-    let(:assignment_2){ Fabricate(:assignment, course: course) }
-
-    before do
+    it "sets @course to a CourseWithGrades object" do
+      instructor = Fabricate(:instructor)
+      course = Fabricate(:course, instructor: instructor)
       set_current_user(instructor)
-      course.students << student_1 << student_2
+
+      get :show, id: course.id
+      expect(assigns(:course)).to be_an_instance_of(CourseWithGrades)
     end
 
-    it "sets @course from the params" do
+    it 'sets @assignments to the course assignments' do
+      instructor = Fabricate(:instructor)
+      course = Fabricate(:course, instructor: instructor)
+      set_current_user(instructor)
+      assignment_1 = Fabricate(:assignment, course: course)
+      assignment_2 = Fabricate(:assignment, course: course)
+
       get :show, id: course.id
-      expect(assigns(:course)).to eq(course.decorate)
+      expect(assigns(:assignments)).to match_array([assignment_1, assignment_2])
+    end
+
+    it 'renders the show template' do
+      instructor = Fabricate(:instructor)
+      course = Fabricate(:course, instructor: instructor)
+      set_current_user(instructor)
+
+      get :show, id: course.id
+      expect(response).to render_template('show')
     end
   end
 

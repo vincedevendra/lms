@@ -1,129 +1,279 @@
 require 'spec_helper'
 
 describe GradesController do
-  let(:instructor) { Fabricate(:instructor) }
-  let(:course) { Fabricate(:course, instructor: instructor) }
-  let(:student) { Fabricate(:user) }
-  let(:assignment) { Fabricate(:assignment, course: course) }
-  let!(:submission) { create_submission(student, assignment) }
-
   describe 'GET#index' do
-    before do
-      course.students << student
-      set_current_user(instructor)
-    end
-
     it_behaves_like 'no_current_user_redirect' do
+      let(:course) { Fabricate(:course) }
+      let(:assignment) { Fabricate(:assignment, course: course) }
       let(:action) do
-        get :index, course_id: course.id, id: assignment.id
+        get :index, course_id: course.id, assignment_id: assignment.id
       end
     end
 
     it_behaves_like 'unless_instructor_redirect' do
+      let(:course) { Fabricate(:course) }
+      let(:assignment) { Fabricate(:assignment, course: course) }
       let(:action) do
-        get :index, course_id: course.id, id: assignment.id
+        get :index, course_id: course.id, assignment_id: assignment.id
       end
     end
 
     it_behaves_like 'unless_instructor_owns_course_redirect' do
       let(:instructor) { Fabricate(:instructor) }
-      let(:course_2) { Fabricate(:course) }
+      let(:course) { Fabricate(:course) }
+      let(:assignment) { Fabricate(:assignment, course: course) }
+
       let(:action) do
-        get :index, course_id: course_2.id, id: assignment.id
+        get :index, course_id: course.id, assignment_id: assignment.id
       end
     end
 
     it 'sets @course from the params' do
-      get :index, course_id: course.id, id: assignment.id
+      instructor = Fabricate(:instructor)
+      course = Fabricate(:course, instructor: instructor)
+      student = Fabricate(:user)
+      assignment = Fabricate(:assignment, course: course)
+      course.students << student
+      set_current_user(instructor)
+
+      get :index, course_id: course.id, assignment_id: assignment.id
       expect(assigns(:course)).to eq(course.decorate)
     end
 
     it 'sets @assignment from the params' do
-      get :index, course_id: course.id, id: assignment.id
+      instructor = Fabricate(:instructor)
+      course = Fabricate(:course, instructor: instructor)
+      student = Fabricate(:user)
+      assignment = Fabricate(:assignment, course: course)
+      course.students << student
+      set_current_user(instructor)
+
+      get :index, course_id: course.id, assignment_id: assignment.id
       expect(assigns(:assignment)).to eq(assignment)
     end
 
-    it "sets @student_submissions to students with associated submissions" do
-      get :index, course_id: course.id, id: assignment.id
-      student_submission = StudentSubmissionTracker.new(student, submission)
-      expect(assigns(:student_submissions).first.student).to eq(student)
-      expect(assigns(:student_submissions).first.submission).to eq(submission)
+    it "sets @students to students with associated submissions if submissions are required for assignment" do
+      instructor = Fabricate(:instructor)
+      course = Fabricate(:course, instructor: instructor)
+      student = Fabricate(:user)
+      assignment = Fabricate(:assignment, course: course, submission_required: true)
+      submission = create_submission(student, assignment)
+      course.students << student
+      set_current_user(instructor)
+
+      get :index, course_id: course.id, assignment_id: assignment.id
+
+      student_with_sub = StudentSubmissionTracker.new(student, submission)
+      expect(assigns(:students).first.student).to eq(student_with_sub.student)
+      expect(assigns(:students).first.assignment_submission).to eq(submission)
+    end
+
+    it "sets @students to assignment course's enrolled students when submissions are not required" do
+      instructor = Fabricate(:instructor)
+      course = Fabricate(:course, instructor: instructor)
+      student = Fabricate(:user)
+      assignment = Fabricate(:assignment, course: course, submission_required: false)
+      course.students << student
+      set_current_user(instructor)
+
+      get :index, course_id: course.id, assignment_id: assignment.id
+
+      expect(assigns(:students)).to eq([student])
     end
 
     it 'renders the index template' do
-      get :index, course_id: course.id, id: assignment.id
+      instructor = Fabricate(:instructor)
+      course = Fabricate(:course, instructor: instructor)
+      student = Fabricate(:user)
+      assignment = Fabricate(:assignment, course: course)
+      course.students << student
+      set_current_user(instructor)
+
+      get :index, course_id: course.id, assignment_id: assignment.id
 
       expect(response).to render_template :index
     end
   end
 
   describe '#create' do
-    let(:student) { Fabricate(:user) }
-    let(:instructor) { Fabricate(:instructor) }
-    let(:course) { Fabricate(:course, instructor: instructor) }
-    let(:assignment) { Fabricate(:assignment, course: course) }
-    let!(:submission) { create_submission(student, assignment) }
-
-    before { set_current_user(instructor) }
-
     it_behaves_like 'no_current_user_redirect' do
+      let(:instructor) { Fabricate(:instructor) }
+      let(:course) { Fabricate(:course, instructor: instructor) }
+      let(:assignment) { Fabricate(:assignment) }
       let(:action) do
-         xhr :post, :create, course_id: course.id, id: assignment.id, submission: submission.id
+         xhr :post, :create, course_id: course.id, assignment_id: assignment.id, grade: { points: 8 }
       end
     end
 
     it_behaves_like 'unless_instructor_redirect' do
+      let(:instructor) { Fabricate(:instructor) }
+      let(:course) { Fabricate(:course, instructor: instructor) }
+      let(:assignment) { Fabricate(:assignment) }
       let(:action) do
-         xhr :post, :create, course_id: course.id, id: assignment.id, submission: submission.id
+         xhr :post, :create, course_id: course.id, assignment_id: assignment.id,  grade: { points: 7 }
       end
     end
 
     it_behaves_like 'unless_instructor_owns_course_redirect' do
-      let(:course_2) { Fabricate(:course) }
+      let(:instructor) { Fabricate(:instructor) }
+      let(:course) { Fabricate(:course) }
+      let(:assignment) { Fabricate(:assignment) }
       let(:action) do
-         xhr :post, :create, course_id: course_2.id, id: assignment.id, submission: submission.id
+         xhr :post, :create, course_id: course.id, assignment_id: assignment.id,  grade: { points: 7 }
       end
     end
 
-    it 'sets @submission from the params' do
-      xhr :post, :create, course_id: course.id, id: assignment.id, submission: submission.id
-      expect(assigns(:submission)).to eq(submission)
+    context "when the student isn't enrolled in the course" do
+      it 'redirects to the grades#index' do
+        instructor = Fabricate(:instructor)
+        course = Fabricate(:course, instructor: instructor)
+        assignment = Fabricate(:assignment, course: course)
+        student = Fabricate(:user)
+        set_current_user(instructor)
+
+        xhr :post, :create, course_id: course.id, assignment_id: assignment.id,  grade: { student_id: student.id, points: 7 }
+
+        expect(response).to redirect_to(course_assignment_grades_path)
+      end
+
+      it "doesn't create the grade" do
+        instructor = Fabricate(:instructor)
+        course = Fabricate(:course, instructor: instructor)
+        assignment = Fabricate(:assignment, course: course)
+        student = Fabricate(:user)
+        set_current_user(instructor)
+
+        xhr :post, :create, course_id: course.id, assignment_id: assignment.id,  grade: { student_id: student.id, points: 7 }
+
+        expect(Grade.count).to eq(0)
+      end
+
+      it 'flashes an danger message' do
+        instructor = Fabricate(:instructor)
+        course = Fabricate(:course, instructor: instructor)
+        assignment = Fabricate(:assignment, course: course)
+        student = Fabricate(:user)
+        set_current_user(instructor)
+
+        xhr :post, :create, course_id: course.id, assignment_id: assignment.id,  grade: { student_id: student.id, points: 7 }
+        expect(flash[:danger]).to be_present
+      end
     end
 
-    context 'when the assignment is not yet graded' do
-      it 'updates the submission with the inputted grade when valid' do
-        xhr :post, :create, course_id: course.id, id: assignment.id, submission: submission.id, grade: 7
-        expect(submission.reload.grade).to eq(7)
-      end
+    it 'updates the student grade with the inputted grade when valid' do
+      instructor = Fabricate(:instructor)
+      course = Fabricate(:course, instructor: instructor)
+      assignment = Fabricate(:assignment, course: course)
+      student = Fabricate(:user)
+      student.courses << course
+      set_current_user(instructor)
 
-      it 'updates the submission with 0 when input is invalid' do
-        xhr :post, :create, course_id: course.id, id: assignment.id, submission: submission.id, grade: 'kazoo'
-        expect(submission.reload.grade).to eq(0)
-      end
+      xhr :post, :create, course_id: course.id, assignment_id: assignment.id,  grade: { student_id: student.id, points: 7 }
 
-      it 'renders the create template' do
-        xhr :post, :create, course_id: course.id, id: assignment.id, submission: submission.id, grade: 7
-        expect(response).to render_template('create')
+      expect(Grade.first.points).to eq(7.0)
+    end
+
+    it 'updates the submission with 0 when input is invalid' do
+      instructor = Fabricate(:instructor)
+      course = Fabricate(:course, instructor: instructor)
+      assignment = Fabricate(:assignment, course: course)
+      student = Fabricate(:user)
+      student.courses << course
+      set_current_user(instructor)
+
+      xhr :post, :create, course_id: course.id, assignment_id: assignment.id,  grade: { student_id: student.id, points: 'kazoo' }
+
+      expect(Grade.first.points).to eq(0.0)
+    end
+
+    it 'renders the create template' do
+      instructor = Fabricate(:instructor)
+      course = Fabricate(:course, instructor: instructor)
+      assignment = Fabricate(:assignment, course: course)
+      student = Fabricate(:user)
+      student.courses << course
+      set_current_user(instructor)
+
+      xhr :post, :create, course_id: course.id, assignment_id: assignment.id,  grade: { student_id: student.id, points: 7 }
+
+      expect(response).to render_template('create')
+    end
+  end
+
+  describe '#update' do
+    it_behaves_like 'no_current_user_redirect' do
+      let(:instructor) { Fabricate(:instructor) }
+      let(:course) { Fabricate(:course, instructor: instructor) }
+      let(:assignment) { Fabricate(:assignment) }
+      let(:student) { Fabricate(:user) }
+      let(:grade) { Fabricate(:grade, assignment: assignment, student: student, points: 10)}
+      let(:action) do
+         xhr :patch, :update, course_id: course.id, assignment_id: assignment.id, grade: { points: 8 }, id: grade.id
       end
     end
 
-    context 'when the assignment is already graded' do
-      before{ submission.update_attribute(:grade, 2) }
-
-      it 'updates the submission with the inputted grade when valid' do
-        xhr :post, :create, course_id: course.id, id: assignment.id, submission: submission.id, grade: 7
-        expect(submission.reload.grade).to eq(7)
+    it_behaves_like 'unless_instructor_redirect' do
+      let(:instructor) { Fabricate(:instructor) }
+      let(:course) { Fabricate(:course, instructor: instructor) }
+      let(:assignment) { Fabricate(:assignment) }
+      let(:student) { Fabricate(:user) }
+      let(:grade) { Fabricate(:grade, assignment: assignment, student: student, points: 10)}
+      let(:action) do
+         xhr :patch, :update, course_id: course.id, assignment_id: assignment.id, grade: { points: 8 }, id: grade.id
       end
+    end
 
-      it 'updates the submission with 0 when input is invalid' do
-        xhr :post, :create, course_id: course.id, id: assignment.id, submission: submission.id, grade: 'kazoo'
-        expect(submission.reload.grade).to eq(0)
+    it_behaves_like 'unless_instructor_owns_course_redirect' do
+      let(:instructor) { Fabricate(:instructor) }
+      let(:course) { Fabricate(:course, instructor: instructor) }
+      let(:assignment) { Fabricate(:assignment) }
+      let(:student) { Fabricate(:user) }
+      let(:grade) { Fabricate(:grade, assignment: assignment, student: student, points: 10)}
+      let(:action) do
+         xhr :patch, :update, course_id: course.id, assignment_id: assignment.id, grade: { points: 8 }, id: grade.id
       end
+    end
 
-      it 'renders the create template' do
-        xhr :post, :create, course_id: course.id, id: assignment.id, submission: submission.id, grade: 7
-        expect(response).to render_template('create')
-      end
+    it 'updates the student grade with the inputted grade when valid' do
+      instructor = Fabricate(:instructor)
+      course = Fabricate(:course, instructor: instructor)
+      assignment = Fabricate(:assignment, course: course)
+      student = Fabricate(:user)
+      grade = Fabricate(:grade, assignment: assignment, student: student, points: 10.0)
+      student.courses << course
+      set_current_user(instructor)
+
+      xhr :patch, :update, course_id: course.id, assignment_id: assignment.id, grade: { points: 8 }, id: grade.id
+
+      expect(Grade.first.points).to eq(8.0)
+    end
+
+    it 'updates the submission with 0 when input is invalid' do
+      instructor = Fabricate(:instructor)
+      course = Fabricate(:course, instructor: instructor)
+      assignment = Fabricate(:assignment, course: course)
+      student = Fabricate(:user)
+      grade = Fabricate(:grade, assignment: assignment, student: student, points: 10.0)
+      student.courses << course
+      set_current_user(instructor)
+
+      xhr :patch, :update, course_id: course.id, assignment_id: assignment.id, grade: { points: 'kazoo' }, id: grade.id
+
+      expect(Grade.first.points).to eq(0.0)
+    end
+
+    it 'renders the create template' do
+      instructor = Fabricate(:instructor)
+      course = Fabricate(:course, instructor: instructor)
+      assignment = Fabricate(:assignment, course: course)
+      student = Fabricate(:user)
+      grade = Fabricate(:grade, assignment: assignment, student: student, points: 10.0)
+      student.courses << course
+      set_current_user(instructor)
+
+      xhr :patch, :update, course_id: course.id, assignment_id: assignment.id, grade: { points: 8 }, id: grade.id
+
+      expect(response).to render_template('create')
     end
   end
 end

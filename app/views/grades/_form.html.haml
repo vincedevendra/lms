@@ -1,0 +1,4 @@
+= bootstrap_form_for [course, assignment, grade], remote: true do |f|
+  = f.hidden_field :student_id, value: student.id
+  = f.text_field :points, class: 'input-sm pull-left', hide_label: true, value: grade.points
+  = f.submit 'Submit', class: 'btn btn-sm btn-default'

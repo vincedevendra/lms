@@ -144,8 +144,10 @@ describe GradeTracker::Course do
         course = Fabricate(:course)
         assignment_1 = Fabricate(:assignment, course: course)
         assignment_2 = Fabricate(:assignment, course: course)
-        allow(student).to receive(:get_grade_for).with(assignment_1) {10}
-        allow(student).to receive(:get_grade_for).with(assignment_2) {20}
+        grade_1 = double('grade_1', points: 10)
+        grade_2 = double('grade_1', points: 20)
+        allow(student).to receive(:grade_for).with(assignment_1) { grade_1 }
+        allow(student).to receive(:grade_for).with(assignment_2) { grade_2 }
         student_course_grade_tracker =
           GradeTracker::Course::Student.new(student, course)
 
@@ -180,19 +182,15 @@ describe GradeTracker::Course do
 
       it 'returns the percent average of all graded course assignments, if any' do
         student_grade_tracker = GradeTracker::Course::Student.new(student, course)
-        submission_for_assignment_1 = create_submission(student, assignment_1)
-        submission_for_assignment_1.update_attribute(:grade, 10)
-        submission_for_assignment_2 = create_submission(student, assignment_2)
-        submission_for_assignment_2.update_attribute(:grade, 20)
+        grade_1 = Fabricate(:grade, assignment: assignment_1, student: student, points: 10)
+        grade_2 = Fabricate(:grade, assignment: assignment_2, student: student, points: 20)
 
         expect(student_grade_tracker.course_average).to eq(75)
       end
 
       it 'returns the precent average of only graded course assignments' do
         student_grade_tracker = GradeTracker::Course::Student.new(student, course)
-        submission_for_assignment_1 = create_submission(student, assignment_1)
-        submission_for_assignment_1.update_attribute(:grade, 10)
-        submission_for_assignment_2 = create_submission(student, assignment_2)
+        grade_1 = Fabricate(:grade, assignment: assignment_1, student: student, points: 10)
 
         expect(student_grade_tracker.course_average).to eq(50)
       end

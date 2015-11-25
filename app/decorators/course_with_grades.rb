@@ -7,7 +7,8 @@ class CourseWithGrades < SimpleDelegator
   end
 
   def students
-    @students ||= @course_grade_tracker.students.map do |student| StudentWithCourseGrades.new(student)
+    @students ||= @course_grade_tracker.students.map do |student|
+      StudentWithCourseGrades.new(student)
     end
   end
 

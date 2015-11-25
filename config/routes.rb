@@ -7,13 +7,11 @@ Rails.application.routes.draw do
     get 'grade_report', on: :member, to: 'courses#show'
     resources :assignments do
       resources :submissions, only: [:create, :update, :show]
-      get 'grade', on: :member, to: 'grades#index'
+      resources :grades, only: [:index, :create, :edit, :update]
     end
     resources :enrollments, only: [:new, :create]
     delete 'enrollments', to: 'enrollments#destroy', as: 'enrollment'
   end
-
-  resources :grades, only: [:create, :edit]
 
   resources :users, only: :create
   get 'register', to: "users#new"

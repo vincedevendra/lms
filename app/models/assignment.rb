@@ -3,6 +3,7 @@ class Assignment < ActiveRecord::Base
 
   belongs_to :course
   has_many :submissions
+  has_many :grades
 
   def student_submission(student)
     submissions.bsearch { |submission| submission.student == student }
@@ -13,13 +14,13 @@ class Assignment < ActiveRecord::Base
   end
 
   def average_grade
-    submissions.average(:grade)
+    grades.average(:points)
   end
 
   def median_grade
-    return if submissions.empty?
+    return if self.grades.empty?
 
-    grades = submissions.map(&:grade).compact.sort
+    grades = self.grades.map(&:points).compact.sort
     length = grades.length
     return nil if length.zero?
 

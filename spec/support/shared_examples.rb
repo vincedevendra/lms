@@ -1,10 +1,8 @@
 shared_examples "no_current_user_redirect" do
-  before do
+  it "should redirect to sign_in_path" do
     clear_current_user
     action
-  end
 
-  it "should redirect to sign_in_path" do
     expect(response).to redirect_to sign_in_path
   end
 end
@@ -59,7 +57,6 @@ shared_examples "unless_instructor_owns_course_redirect" do
   context "when an instructor doesn't own a class" do
     before do
       set_current_user(instructor)
-      instructor.courses_owned.delete_all
       action
     end
 
@@ -69,15 +66,6 @@ shared_examples "unless_instructor_owns_course_redirect" do
 
     it 'flashes a warning message' do
       expect(flash[:warning]).to be_present
-    end
-  end
-
-  context 'when an instructor does own a class' do
-    it 'does not redirect' do
-      instructor.courses_owned << course_2
-      set_current_user(instructor.reload)
-      action
-      expect(response.status).to eq(200)
     end
   end
 end

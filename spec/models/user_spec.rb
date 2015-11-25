@@ -14,27 +14,39 @@ describe User do
   it { should have_many(:enrollments) }
   it { should have_many(:courses).through(:enrollments) }
   it { should have_many(:submissions) }
+  it { should have_many(:grades) }
 
-  describe '#get_grade_for' do
+  describe '#grade_for' do
     let(:student){ Fabricate(:user) }
     let(:course){ Fabricate(:course) }
     let(:assignment){ Fabricate(:assignment, course: course) }
     before{ student.courses << course }
 
-    it 'returns nil if there is no submission for the assignment' do
-      expect(student.get_grade_for(assignment)).to be_nil
-    end
-
-    it 'returns nil if is there is a submission but it is ungraded' do
-      submission = create_submission(student, assignment)
-      expect(student.get_grade_for(assignment)).to be_nil
+    it 'returns nil if there is no grade for the assignment' do
+      expect(student.grade_for(assignment)).to be_nil
     end
 
     it 'returns the grade for the given assignment if there is one' do
-      submission = create_submission(student, assignment)
-      submission.update_attribute(:grade, 10)
+      grade = Grade.create(assignment: assignment, student: student, points: 10)
 
-      expect(student.get_grade_for(assignment)).to eq(10)
+      expect(student.grade_for(assignment)).to eq(grade)
+    end
+  end
+
+  describe '#assignment_grade?' do
+    let(:student){ Fabricate(:user) }
+    let(:course){ Fabricate(:course) }
+    let(:assignment){ Fabricate(:assignment, course: course) }
+    before{ student.courses << course }
+
+    it 'returns false if there is no grade for the assignment' do
+      expect(student.assignment_grade?(assignment)).to be_falsy
+    end
+
+    it 'returns true if there is a grade for the assignment' do
+      grade = Grade.create(assignment: assignment, student: student, points: 10)
+
+      expect(student.assignment_grade?(assignment)).to be_truthy
     end
   end
 end

@@ -31,7 +31,7 @@ class CoursesController < ApplicationController
 
   def show
     course = Course
-               .includes(assignments: [:submissions], students: [:submissions])
+               .includes(assignments: [:grades], students: [:grades])
                .find(params[:id])
     course_grade_tracker = GradeTracker::Course.new(course)
     @course = CourseWithGrades.new(course_grade_tracker)

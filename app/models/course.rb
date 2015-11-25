@@ -17,7 +17,7 @@ class Course < ActiveRecord::Base
 
   def students_with_submissions(assignment)
     students
-      .includes(:submissions)
+      .includes(:submissions, :grades)
       .where("submissions.id IS NULL OR submissions.assignment_id = ?",
              assignment.id)
       .references(:submissions)

@@ -4,6 +4,7 @@ class User < ActiveRecord::Base
   has_many :enrollments, foreign_key: 'student_id'
   has_many :courses, -> { order(title: :asc) }, through: :enrollments
   has_many :submissions
+  has_many :grades, foreign_key: 'student_id'
 
   validates_presence_of [:email, :password, :password_confirmation, :first_name, :last_name]
   validates_confirmation_of :password
@@ -13,9 +14,11 @@ class User < ActiveRecord::Base
     first_name + " " + last_name
   end
 
-  def get_grade_for(assignment)
-    submissions.find do |submission|
-      submission.assignment_id == assignment.id
-    end.try(:grade)
+  def grade_for(assignment)
+    grades.find { |grade| grade.try(:assignment_id) == assignment.id }
+  end
+
+  def assignment_grade?(assignment)
+    !!grade_for(assignment)
   end
 end
