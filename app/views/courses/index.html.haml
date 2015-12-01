@@ -5,9 +5,9 @@
   .row
     .col-md-10
       .header.instructor-title
-        = link_to "#{current_user.last_name} - COURSES", "#", class: 'title'
+        .title #{current_user.last_name} - COURSES
         - if current_user.instructor?
-          = link_to new_course_path, remote: true, class: 'new-card' do
+          = link_to new_course_path, remote: true, class: 'new-card', title: 'Create a New Course' do
             %span.glyphicon.glyphicon-plus
     .course-cards
       - if @courses.any?

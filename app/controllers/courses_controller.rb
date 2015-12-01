@@ -1,5 +1,5 @@
 class CoursesController < ApplicationController
-  before_action :unless_instructor_redirect, except: :index
+  before_action :unless_instructor_redirect, except: [:index, :show]
   before_action :find_course, only: [:edit, :update, :show, :destroy]
   before_action :no_current_user_redirect, only: :index
   respond_to :js, :html
@@ -30,11 +30,22 @@ class CoursesController < ApplicationController
   end
 
   def show
-    course = Course
-               .includes(assignments: [:grades], students: [:grades])
-               .find(params[:id])
-    course_grade_tracker = GradeTracker::Course.new(course)
-    @course = CourseWithGrades.new(course_grade_tracker)
+    if current_user.instructor?
+      course = Course
+                 .includes(assignments: [:grades], students: [:grades])
+                 .find(params[:id])
+      course_grade_tracker = GradeTracker::Course.new(course)
+      @course = CourseWithGrades.new(course_grade_tracker)
+    elsif current_user.courses.include?(@course)
+      student = User.includes(:grades).find(session[:user_id])
+      student_grade_tracker =
+        GradeTracker::Course::Student.new(student, @course)
+      @student = StudentWithCourseGrades.new(student_grade_tracker)
+    else
+      flash[:danger] = "Access denied."
+      redirect_to root_path and return
+    end
+
     @assignments = AssignmentDecorator.decorate_collection(@course.assignments)
   end
 

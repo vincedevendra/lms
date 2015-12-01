@@ -15,7 +15,7 @@ feature 'student uploads and updates submission' do
     end
 
     scenario 'it hides the submisison form from student' do
-      expect(page).to have_content "Choose a New File"
+      expect(page).not_to have_content "Choose a New File"
     end
   end
 
@@ -23,7 +23,7 @@ feature 'student uploads and updates submission' do
     given(:course) { Fabricate(:course) }
     given(:student) { Fabricate(:user) }
     given(:instructor) { Fabricate(:instructor) }
-    given!(:assignment) { Fabricate(:assignment, course: course, submission_required: false) }
+    given!(:assignment) { Fabricate(:assignment, course: course, submission_required: true) }
 
     background do
       student.courses << course
@@ -57,7 +57,7 @@ feature 'student uploads and updates submission' do
     given(:course) { Fabricate(:course) }
     given(:student) { Fabricate(:user) }
     given(:instructor) { Fabricate(:instructor) }
-    given!(:assignment) { Fabricate(:assignment, course: course, submission_required: false) }
+    given!(:assignment) { Fabricate(:assignment, course: course, submission_required: true) }
 
     background do
       student.courses << course
