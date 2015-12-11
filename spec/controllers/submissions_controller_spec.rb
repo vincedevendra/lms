@@ -39,40 +39,5 @@ describe SubmissionsController do
               id: submission.id
       end
     end
-
-    context "when the submission does not have a box view id" do
-      it "uploads the file to the Box View API" do
-        instructor = Fabricate(:instructor)
-        course = Fabricate(:course, instructor: instructor)
-        assignment = Fabricate(:assignment, course: course)
-        student = Fabricate(:user)
-        course.students << student
-        submission = create_submission(student, assignment)
-        
-        set_current_user(instructor)
-
-        get :show, course_id: course.id, assignment_id: assignment.id, id: submission.id
-        expect(submission).to have_received :upload_to_box_view
-      end
-
-      it "saves the box view id on the submission" do
-        instructor = Fabricate(:instructor)
-        course = Fabricate(:course, instructor: instructor)
-        assignment = Fabricate(:assignment, course: course)
-        student = Fabricate(:user)
-        course.students << student
-        submission = create_submission(student, assignment)
-
-        set_current_user(instructor)
-        get :show, course_id: course.id, assignment_id: assignment.id, id: submission.id
-        
-        expect(submission.box_view_id).to be_present
-      end
-    end
-
-    context "when the submission has a box view id" do
-      it "assigns the view-url"
-      it "renders the show template"
-    end
   end
 end
