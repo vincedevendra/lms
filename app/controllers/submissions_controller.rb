@@ -21,6 +21,13 @@ class SubmissionsController < ApplicationController
     end
   end
 
+  def show
+    submission = Submission.find[:id]
+    @submission_viewer = SubmissionViewer.new(submission)
+    
+    @submission_viewer.upload_submission unless submission.box_view_id?
+  end
+
   def update
     @submission = Submission.find(params[:id])
     if @submission.update(submission_params.merge!(submitted_at: Time.now))

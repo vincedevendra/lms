@@ -17,7 +17,7 @@ module Lms
     config.active_job.queue_adapter = :sidekiq
 
     config.assets.enabled = true
-    config.assets.precompile += %w( bootstrap-clockpicker.min.js )
+    config.assets.precompile += %w(bootstrap-clockpicker.min.js annotator-full.min.js crocodoc.viewer.js)
 
     config.autoload_paths += %W(#{config.root}/lib)
     config.generators do |g|
