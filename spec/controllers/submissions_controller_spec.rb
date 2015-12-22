@@ -50,7 +50,9 @@ describe SubmissionsController do
       course.students << student
       submission = create_submission(student, assignment)
       set_current_user(instructor)
-      uploader = double('uploader', :upload_to_box_view)
+      uploader = double('uploader')
+      allow(uploader).to receive(:upload_to_box_view)
+      allow(uploader).to receive(:success?)
       allow(SubmissionBoxViewUploader).to receive(:new) { uploader }
 
       get :show, course_id: course.id, assignment_id: assignment.id, id: submission.id
