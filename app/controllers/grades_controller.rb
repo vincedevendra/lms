@@ -28,7 +28,7 @@ class GradesController < ApplicationController
   end
 
   def update
-    @grade.update(grade_params)
+    @grade.update_attribute(:points, params[:grade][:points])
     render 'create'
   end
 

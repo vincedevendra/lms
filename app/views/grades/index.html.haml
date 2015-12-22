@@ -21,7 +21,7 @@
             %th Student ID
             - if @assignment.submission_required?
               %th Submission Date
-              -# %th View and Comment
+              %th View and Comment
               %th Download
             %th Grade (Out of #{@assignment.point_value})
         %tbody
@@ -33,9 +33,9 @@
                 %td= student.student_id
                 - if @assignment.submission_required && student.assignment_submission
                   %td= student.display_submitted_at_time
-                  -# %td
-                  -#   =link_to course_assignment_submission_path(@course, @assignment, student_submission.submission) do
-                  -#     %span.glyphicon.glyphicon-eye-open
+                  %td
+                    =link_to course_assignment_submission_path(@course, @assignment, student.assignment_submission) do
+                      %span.glyphicon.glyphicon-eye-open
                   %td
                     = link_to student.submission_url do
                       %span.glyphicon.glyphicon-download-alt

@@ -25,4 +25,11 @@ class ApplicationController < ActionController::Base
     @assignment = Assignment.find(params[:assignment_id] || params[:id])
     @course = @assignment.course.decorate
   end
+  
+  def redirect_unless_instructor_owns_course
+    unless @course.instructor == current_user
+      flash[:warning] = 'Access denied'
+      redirect_to root_path
+    end
+  end
 end

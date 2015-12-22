@@ -1,9 +1,11 @@
 class SubmissionsController < ApplicationController
   before_action :no_current_user_redirect
   before_action :get_assignment_and_course
+  before_action :redirect_unless_instructor_owns_course, only: :show 
   before_action :get_assignments
-  before_action :redirect_if_not_enrolled
-  before_action :handle_no_file_chosen
+  before_action :get_submission, except: :create
+  before_action :redirect_if_not_enrolled, except: :show
+  before_action :handle_no_file_chosen, except: :show
 
   def create
     @submission =
@@ -21,8 +23,17 @@ class SubmissionsController < ApplicationController
     end
   end
 
+  def show
+    render 'show' and return if @submission.box_view_id? 
+    uploader = SubmissionBoxViewUploader.new(@submission) 
+    uploader.upload_to_box_view
+
+    if uploader.success?
+      @submission.update_attribute(:box_view_id, uploader.box_view_id)
+    end
+  end
+
   def update
-    @submission = Submission.find(params[:id])
     if @submission.update(submission_params.merge!(submitted_at: Time.now))
       flash[:success] = 'Your file has been uploaded.'
       redirect_to course_assignments_path(@course)
@@ -56,5 +67,9 @@ class SubmissionsController < ApplicationController
       flash[:warning] = 'Access denied'
       redirect_to root_path
     end
+  end
+
+  def get_submission
+    @submission = Submission.find(params[:id])
   end
 end

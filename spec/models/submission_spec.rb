@@ -13,4 +13,30 @@ describe Submission do
       expect(submission.display_submitted_at_time).to eq('10 Nov 2015 4:28 PM')
     end
   end
+
+  describe 'box_view_url' do
+    it "calls BoxViewWrapper#view_url if the submission has a box_view_id" do
+      submission = Submission.new(box_view_id: '123')
+      allow(BoxViewWrapper).to receive(:view_url)              
+      
+      submission.box_view_url
+      
+      expect(BoxViewWrapper).to have_received(:view_url).with(submission.box_view_id)
+    end
+
+    it "does call BoxViewWrapper#view_url if the submission has no box_view_id" do
+      submission = Submission.new
+      allow(BoxViewWrapper).to receive(:view_url)              
+      
+      submission.box_view_url
+
+      expect(BoxViewWrapper).not_to have_received(:view_url)
+    end
+    
+    it "does call BoxViewWrapper#view_url if the submission has no box_view_id" do
+      submission = Submission.new
+      
+      expect(submission.box_view_url).to be_nil
+    end
+  end
 end

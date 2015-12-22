@@ -1,7 +1,7 @@
 class BoxViewWrapper
   TOKEN = ENV['BOX_VIEW_API_KEY']
   UPLOAD_URL = 'https://view-api.box.com/1/documents'
-  VIEW_URL = 'https://api.notablepdf.com/embed/sessions'
+  VIEW_URL = 'https://view-api.box.com/1/sessions'
 
   def self.upload(file_url, file_name)
     values = {
@@ -14,7 +14,9 @@ class BoxViewWrapper
       "Authorization" => "Token #{TOKEN}"
     }
 
-    JSON[RestClient.post(UPLOAD_URL, values, headers)]
+    RestClient.post(UPLOAD_URL, values, headers) do |response, request, result|
+      result.class == Net::HTTPAccepted ? JSON[response] : :error
+    end
   end
 
   def status(box_view_id)
@@ -23,25 +25,17 @@ class BoxViewWrapper
     JSON[RestClient.get(EMBED_URL + "/#{box_view_id}"), headers]
   end
 
-  def view_url
+  def self.view_url(box_view_id)
     values = {
-      "document_identifier" => submission.kami_id,
-      "user" => {
-        "name" => user.full_name,
-        "user_id" => user.id
-      },
-      "expires_at" => 45.minutes.from_now,
-      "viewer_options" => {
-        "theme" => "light"
-      }
+      "document_id" => box_view_id
     }.to_json
 
     headers = {
-      :content_type => 'application/json',
-      :authorization => "Token #{TOKEN}"
+      "Content-Type" => 'application/json',
+      "Authorization" => "Token #{TOKEN}"
     }
 
     response = JSON[RestClient.post VIEW_URL, values, headers]
-    response['viewer_url']
+    response['urls']['view']
   end
 end

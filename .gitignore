@@ -27,3 +27,4 @@
 /config/database.yml
 /dump.rdb
 /public/uploads
+/spec/cassettes

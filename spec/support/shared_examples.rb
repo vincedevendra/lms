@@ -54,18 +54,15 @@ shared_examples 'redirects when not enrolled' do
 end
 
 shared_examples "unless_instructor_owns_course_redirect" do
-  context "when an instructor doesn't own a class" do
-    before do
-      set_current_user(instructor)
-      action
-    end
+  it 'redirects to root_path' do
+    set_current_user(instructor)
+    action
+    expect(response).to redirect_to root_path
+  end
 
-    it 'redirects to root_path' do
-      expect(response).to redirect_to root_path
-    end
-
-    it 'flashes a warning message' do
-      expect(flash[:warning]).to be_present
-    end
+  it 'flashes a warning message' do
+    set_current_user(instructor)
+    action
+    expect(flash[:warning]).to be_present
   end
 end
