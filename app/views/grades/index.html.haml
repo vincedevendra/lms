@@ -7,7 +7,7 @@
           %br
           Assignment:
         .col-sm-9
-          = @course.display_title
+          = link_to @course.display_title, courses_path
           %br
           = @assignment.title.titleize
       .assignment-info
