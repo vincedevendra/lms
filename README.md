@@ -6,7 +6,7 @@
 
 ##GradeBook
 
-Demo: vince-lms@herokuapp.com
+Demo: vince-lms.herokuapp.com
 
 Allows professors and students to share a common interface for assignment viewing, submitting, and grading course work.
 
