@@ -13,6 +13,6 @@
       Grade (Out of #{@submission.assignment.point_value})
       .div{id: "grade_#{@submission.student.id}"}
         - unless @submission.student.grade_for(@submission.assignment)
-          = render 'grades/form', course: @submission.assignment.course, assignment: @submission.assignment, grade: Grade.new 
+          = render 'grades/form', course: @submission.assignment.course, assignment: @submission.assignment, grade: Grade.new, student: @submission.student
         - else
           = render 'grades/edit_link', grade: @submission.student.grade_for(@submission.assignment), course: @submission.assignment.course, assignment: @submission.assignment 
