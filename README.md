@@ -6,7 +6,9 @@
 
 ##GradeBook
 
-Demo: vince-lms.herokuapp.com
+Demo: [vince-lms.herokuapp.com](https://vince-lms.herokuapp.com)
+Instructor Login: instructor@example.com
+Student Login: student@example.com
 
 Allows professors and students to share a common interface for assignment viewing, submitting, and grading course work.
 
