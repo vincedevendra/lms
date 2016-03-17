@@ -6,4 +6,19 @@
 
 ##GradeBook
 
-Allows professors and students to share a common interface for assignment viewing, submitting, and grading.
+Demo: vince-lms@herokuapp.com
+
+Allows professors and students to share a common interface for assignment viewing, submitting, and grading course work.
+
+###Features
+Professors Can:
+- Create courses
+- Create course assignments
+- Invite students to enroll in courses
+- Display student submisssions in-app
+- Grade student submissions
+
+Students Can:
+- View course assignments
+- Upload file submissions for assignments
+- View assigned grades
