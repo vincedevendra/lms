@@ -1,0 +1,18 @@
+%section.container
+  .row
+    .col-md-12
+      .header 
+        Student: #{@submission.student.full_name}
+        %br
+        Assignment: #{@submission.assignment.title}
+      =link_to course_assignment_grades_path(@submission.assignment.course, @submission.assignment), class: 'back' do
+        Back to Assignment Grading Page
+    .col-md-10
+      %iframe{src: @submission.box_view_url, width: '100%', height: '800px'}
+    .col-md-2.well
+      Grade (Out of #{@submission.assignment.point_value})
+      .div{id: "grade_#{@submission.student.id}"}
+        - unless @submission.student.grade_for(@submission.assignment)
+          = render 'grades/form', course: @submission.assignment.course, assignment: @submission.assignment, grade: Grade.new, student: @submission.student
+        - else
+          = render 'grades/edit_link', grade: @submission.student.grade_for(@submission.assignment), course: @submission.assignment.course, assignment: @submission.assignment 

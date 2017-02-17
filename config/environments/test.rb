@@ -29,7 +29,9 @@ Rails.application.configure do
   # Tell Action Mailer not to deliver emails to the real world.
   # The :test delivery method accumulates sent emails in the
   # ActionMailer::Base.deliveries array.
+  config.active_job.queue_adapter = :test
   config.action_mailer.delivery_method = :test
+  config.action_mailer.default_url_options = { host: 'http://0.0.0.0:3000' }
 
   # Randomize the order test cases are executed.
   config.active_support.test_order = :random
@@ -40,3 +42,6 @@ Rails.application.configure do
   # Raises error for missing translations
   # config.action_view.raise_on_missing_translations = true
 end
+
+Capybara.app_host = "http://0.0.0.0:3000"
+Capybara.server_port = 3000

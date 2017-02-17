@@ -1,0 +1,6 @@
+!!! 5
+%html(lang="en-US")
+  %body
+    %h3 You have been invited to register for GradeBook!
+    %hr
+    %p #{@invitation.course.instructor.first_name} #{@invitation.course.instructor.last_name} wants you to be able to submit assignments and check your grades for the course #{@invitation.course.title.titleize}.  To accept this request, click       #{link_to 'here', register_url(token: @invitation.token)}.

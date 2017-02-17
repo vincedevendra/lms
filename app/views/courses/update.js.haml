@@ -1,0 +1,6 @@
+- if @course.valid?
+  $('.messages-container').html("#{ j render 'shared/messages' }");
+  $("#course_#{@course.id}").replaceWith("#{ j render 'course', course: @course.decorate }");
+  $('.modal-form').modal('hide');
+- else
+  $('.modal-form').html("#{ j render 'form', title: "Edit Course"}")

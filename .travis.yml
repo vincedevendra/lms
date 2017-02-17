@@ -1,0 +1,13 @@
+language: ruby
+cache: bundler
+rvm:
+  - 2.2.3
+before_script:
+  - cp config/database.yml.travis config/database.yml
+  - psql -c 'create database travis_ci_test;' -U postgres
+  - export DISPLAY=:99.0
+  - sh -e /etc/init.d/xvfb start
+script: bundle exec rspec spec
+services:
+  - postgresql
+  - redis-server

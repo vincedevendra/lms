@@ -1,0 +1,59 @@
+= javascript_include_tag 'bootstrap-clockpicker.min.js'
+.modal.fade#modal_form
+  .modal-dialog
+    .modal-content
+      .modal-header
+        %button{type: "button", class: "close", 'data-dismiss' => "modal", 'aria-label' => "Close"}
+          %span{'aria-hidden' => 'true'} &times;
+        %h3 New Class
+      = bootstrap_form_for @course, label_col: 'col-md-3', control_col: 'col-md-6') do |f|
+        .modal-body
+          .fieldset
+            = f.alert_message "Please fix the following errors:"
+            = f.text_field :title, label: "Course Title"
+            = f.text_field :code, label: "Course Code"
+            = f.text_field :location, label: "Location"
+            = f.collection_check_boxes :meeting_days, Date::DAYNAMES, :to_sym, :to_s, inline: true
+          .fieldset.form-inline
+            = f.text_field :start_time, class: 'form-control', wrapper: { class: 'input-group clockpicker-start-time form-inline', data: { placement: 'top', donetext: "Done"}}
+            %script{ type: 'text/javascript'}
+              $('.clockpicker-start-time').clockpicker();
+            = f.text_field :end_time, class: 'form-control', wrapper: { class: 'input-group clockpicker-end-time form-inline', data: { placement: 'top', donetext: "Done"}}
+            %script{ type: 'text/javascript'}
+              $('.clockpicker-end-time').clockpicker();
+        .modal-footer
+          = f.submit class: 'btn btn-default btn-submit pull-left col-sm-2'
+          %buttton.btn.btn-default.btn-close.pull-left{ data: { dismiss: 'modal'}} Close
+%section.container.assignments
+  .row
+    .col-md-10
+      .header.instructor-title
+        = link_to current_user.last_name, "#", class: 'title'
+        = link_to "#", class: 'new-card', data: {toggle: 'modal', target: '#modal_form'}  do
+          %span.glyphicon.glyphicon-plus
+    - @courses.each do |course|
+      .well.col-sm-10.info-card
+        .title-bar
+          .dropdown.pull-right
+            %a.dropdown-toggle.cog{type: "button", "data-toggle" => "dropdown"}
+              %span.glyphicon.glyphicon-cog
+            %ul.dropdown-menu
+              %li
+                = link_to edit_course_path(course), remote: true  do
+                  %span.glyphicon.glyphicon-pencil
+                  Edit
+                = link_to course, method: :delete, data: { confirm: "Are you sure you want to delete this assignment?"} do
+                  %span.glyphicon.glyphicon-remove
+                  Delete
+          .main-text.text-center
+            %h3= "#{course.title} (#{course.code})"
+        .col-sm-6
+          %dt Location
+          %dd= course.location
+          %dt Meeting Times
+          %dd=  course.meet_days
+          %dt Number of Students
+          %dd= course.students.count
+        .col-sm-6
+          %dt Notes
+          %dd= course.notes

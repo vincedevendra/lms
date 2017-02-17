@@ -4,14 +4,15 @@
       %button{type: "button", class: "close", 'data-dismiss' => "modal", 'aria-label' => "Close"}
         %span{'aria-hidden' => 'true'} &times;
       %h3= title
-    = bootstrap_form_for(@assignment, layout: :horizontal, label_col: 'col-md-3', control_col: 'col-md-6') do |f|
+    = bootstrap_form_for([@course, @assignment], remote: true, layout: :horizontal, label_col: 'col-md-3', control_col: 'col-md-6') do |f|
       .modal-body
-        %fieldset
+        .fieldset
           = f.alert_message "Please fix the following errors:"
           = f.text_field :title
           = f.text_field :due_date, data: {"provide" => 'datepicker', "date-format" => "yyyy-mm-dd" }
           = f.text_area :description, rows: 10
           = f.number_field :point_value
+          = f.check_box :submission_required, label: "Require Online Submission?"
       .modal-footer
         %fieldset.control-group.col-md-offset-7
           = f.submit "Submit", class: 'btn btn-default btn-submit pull-left'

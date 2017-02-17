@@ -14,9 +14,17 @@
 # Ignore all logfiles and tempfiles.
 /log/*
 !/log/.keep
-/tmp
+/tmp/cache
+/tmp/capybara
+/tmp/letter_opener
+/tmp/pids
+/tmp/sessions/
+/tmp/sockets
 
 # Ignore application configuration
 /config/application.yml
 
 /config/database.yml
+/dump.rdb
+/public/uploads
+/spec/cassettes

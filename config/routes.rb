@@ -1,9 +1,17 @@
 Rails.application.routes.draw do
   get 'ui(/:action)', controller: 'ui'
 
-  root 'assignments#index'
+  root 'courses#index'
 
-  resources :assignments
+  resources :courses do
+    get 'grade_report', on: :member, to: 'courses#show'
+    resources :assignments do
+      resources :submissions, only: [:create, :update, :show]
+      resources :grades, only: [:index, :create, :edit, :update]
+    end
+    resources :enrollments, only: [:new, :create]
+    delete 'enrollments', to: 'enrollments#destroy', as: 'enrollment'
+  end
 
   resources :users, only: :create
   get 'register', to: "users#new"

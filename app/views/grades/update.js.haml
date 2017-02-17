@@ -1,0 +1,4 @@
+- if @grade.valid?
+  $("#grade_#{@grade.student.id}").html("#{ j render 'grades/edit_link', assignment: @assignment, course: @course, grade: @grade}")
+- else
+  $('.messages-container').html("#{ j render 'shared/messages' }")

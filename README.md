@@ -1,9 +1,26 @@
+![Travis Status](https://travis-ci.org/vincedevendra/lms.svg?branch=master)
+![Code Climate](https://codeclimate.com/github/vincedevendra/lms/badges/gpa.svg)
+![Test Coverage](https://codeclimate.com/github/vincedevendra/lms/badges/coverage.svg)
+
 #README
 
-##LMS
+##GradeBook
 
-A small app to allow professors to share assignment details with their students.
+Demo: [vince-lms.herokuapp.com](https://vince-lms.herokuapp.com)
+Instructor Login: instructor@example.com
+Student Login: student@example.com
 
-Professors register through `/register_professor`
-A key is necessary for professors to register.  `ENV[:professor_key]` must be set for this feature to work.
+Allows professors and students to share a common interface for assignment viewing, submitting, and grading course work.
 
+###Features
+Professors Can:
+- Create courses
+- Create course assignments
+- Invite students to enroll in courses
+- Display student submisssions in-app
+- Grade student submissions
+
+Students Can:
+- View course assignments
+- Upload file submissions for assignments
+- View assigned grades

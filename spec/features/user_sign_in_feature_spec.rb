@@ -1,8 +1,11 @@
 require 'spec_helper'
 
 feature "user signs in" do
+  given!(:course) { Fabricate(:course) }
   given(:user) { Fabricate(:user) }
-  given!(:assignment) { Fabricate(:assignment) }
+  given!(:assignment) { Fabricate(:assignment, course: course) }
+
+  background { user.courses << course }
 
   scenario "user signs in" do
     visit sign_in_path
@@ -10,7 +13,7 @@ feature "user signs in" do
     fill_in :password, with: user.password
     click_button "Submit"
 
-    expect(page).to have_content(assignment.title)
+    expect(page).to have_content(course.title.titleize)
     expect(page).to have_content("Sign Out")
   end
 end

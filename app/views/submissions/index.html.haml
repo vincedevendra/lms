@@ -1,0 +1,48 @@
+%section.container.assignments
+  .row
+    .col-md-12
+      .header
+        .col-sm-3
+          Course:
+          %br
+          Assignment:
+        .col-sm-9
+          = @course.display_title
+          %br
+          = @assignment.title.titleize
+      .assignment-info
+        .col-sm-12
+          Due Date: #{@assignment.due_date.strftime('%b %d, %Y')}
+      %table.table.table-hover
+        %thead
+          %tr.text-center
+            %th First Name
+            %th Last Name
+            %th Student ID
+            %th Submission Date
+            -# %th View and Comment
+            %th Download
+            %th Grade (Out of 10)
+        %tbody
+          - if @student_submissions.any?
+            - @student_submissions.each do |student_submission|
+              %tr
+                %td= student_submission.first_name
+                %td= student_submission.last_name
+                %td= student_submission.student_id
+                - if student_submission.submission
+                  %td= student_submission.display_submitted_at_time
+                  -# %td
+                  -#   =link_to course_assignment_submission_path(@course, @assignment, student_submission.submission) do
+                  -#     %span.glyphicon.glyphicon-eye-open
+                  %td
+                    = link_to student_submission.submission_url do
+                      %span.glyphicon.glyphicon-download-alt
+                  %td{id: "grade_#{student_submission.submission.id}"}
+                    - unless student_submission.submission.grade?
+                      = render 'submissions/form', submission: student_submission.submission
+                    - else
+                      = render 'grades/edit_link', submission: student_submission.submission
+                - else
+                  - 3.times do
+                    %td no submission

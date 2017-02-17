@@ -1,16 +1,18 @@
 !!! 5
 %html(lang="en-US")
   %head
-    %title Assignments 101
+    %title GradeBook
     %meta(charset="UTF-8")
     %meta(name="viewport" content="width=device-width, initial-scale=1.0")
     = csrf_meta_tag
     = stylesheet_link_tag "application"
     = javascript_include_tag "application"
     <link href='https://fonts.googleapis.com/css?family=Raleway' rel='stylesheet' type='text/css'>
+    = yield :head
   %body
     %header
-      = render 'shared/header' unless current_page?(sign_in_path)
+      = render 'shared/header' unless current_page?(sign_in_path) || current_page?(register_path)
     %div
-      = render 'shared/messages'
+      .messages-container
+        = render 'shared/messages'
       = yield

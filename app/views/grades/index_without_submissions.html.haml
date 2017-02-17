@@ -1,0 +1,32 @@
+%section.container.assignments
+  .row
+    .col-md-12
+      .header
+        .col-sm-3
+          Course:
+          %br
+          Assignment:
+        .col-sm-9
+          = @course.display_title
+          %br
+          = @assignment.title.titleize
+      .assignment-info
+        .col-sm-12
+          Due Date: #{@assignment.due_date.strftime('%b %d, %Y')}
+      %table.table.table-hover
+        %thead
+          %tr.text-center
+            %th First Name
+            %th Last Name
+            %th Student ID
+            %th Grade (Out of #{@assignment.point_value})
+      %tbody
+        - @students.each do |student|
+          %tr
+            %td= student.first_name
+            %td= student.last_name
+            %td= student.student_id
+            %td{id: "grade_#{student.id}"}
+                = render 'submissions/form', submission: student_submission.submission
+              - else
+                = render 'grades/edit_link', submission: student_submission.submission
